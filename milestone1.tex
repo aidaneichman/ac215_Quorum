@@ -19,6 +19,7 @@
 \setlength{\parindent}{0pt}
 \setlist{itemsep=2pt, topsep=1pt, parsep=0pt, leftmargin=1.1em}
 \pagestyle{empty}
+\emergencystretch=2em
 
 \begin{document}
 
@@ -31,26 +32,22 @@ ayuan@g.harvard.edu, rishi\_jain@brown.edu}
 
 \section{Background and Motivation}
 
-Before a federal agency changes a regulation, it has to publish the proposal, accept public comments,
-and respond to them. The comments on one proposed rule make up a \emph{docket}. Large rules draw
-hundreds of thousands of comments, and most are \emph{form letters}, where an organization (the
-\emph{sponsor}) writes one text and asks supporters to send it. All the copies together form a
-\emph{campaign}. A letter sent by 40{,}000 members of an advocacy group is legitimate. The same letter
-under 40{,}000 stolen names is fraud, and the two look identical on arrival. In the FCC's 2017
-net neutrality repeal, about 18 million of 22 million comments were fake. New York's Attorney General
-established this four years later, with subpoenas [4].
+Before changing a regulation, a federal agency must take public comments and respond to them. The
+comments on one rule form a \emph{docket}. Most are \emph{form letters}, one text that an organization
+(the \emph{sponsor}) asks supporters to send, and all copies together form a \emph{campaign}. A letter
+sent by 40{,}000 real members is legitimate. The same letter under 40{,}000 stolen names is fraud,
+and the two look identical on arrival. About 18 million of the 22 million comments on the FCC's 2017
+net neutrality repeal were fake, which New York's Attorney General established four years later [4].
 
 Existing tools stop short of this. Regulations.gov offers keyword search, and agencies group form
-letters by hand. On our development docket, EPA's 2019 ``waters of the United
-States'' rule, staff filed 507{,}230 comments under 201 campaign records, 92 of them with no known
-sponsor. Near-duplicate detection groups copies well [1] but misses reworded letters, and the 1.3
-million likely fake FCC comments Kao found were all reworded [2]. None of these says who is behind a campaign
-or whether its signers are real. Without that, agencies discount genuine campaigns along with fake
-ones, and fraud is found years late, if at all.
-
-The stakeholders are agency staff who must answer the record, the journalists and attorneys general
-who audit it, and advocacy groups, whose real members lose their voice when fraud comes to light. Kao's analysis [2] and the NY AG report [4] drew us to the
-problem.
+letters by hand. On our development docket, EPA's 2019 ``waters of the United States'' rule, staff
+filed 507{,}230 comments under 201 campaign records, 92 with no known sponsor. Near-duplicate
+detection groups copies [1] but misses reworded ones, and the 1.3 million likely fake FCC comments
+Kao found were all reworded [2]. Nothing says who is behind a campaign or whether its signers are
+real, so genuine campaigns get discounted with fake ones and fraud surfaces years late. The
+stakeholders are agency staff who must answer the record, the journalists and attorneys general who
+audit it, and advocacy groups whose real members lose their voice. Kao's analysis [2] and the NY AG
+report [4] drew us to the problem.
 
 \section{Problem Statement}
 
@@ -60,96 +57,90 @@ and the evidence on whether real people sent it, without labelling any individua
 \section{Data Sources}
 
 \begin{itemize}
-  \item \textbf{Source.} Public APIs of Regulations.gov and the FCC's Electronic Comment Filing
-        System (ECFS), the Federal Register API for rule text, and two sets of known fakes, the NY AG
-        report [4] and Weiss's 1{,}001 machine-written comments [3].
-  \item \textbf{Description.} Comment text with receipt dates and PDF attachments.\\
-        Development docket \texttt{EPA-HQ-OW-2018-0149} has 11{,}444 records, including 201 campaign
-        records that stand for 507{,}230 comments. The validation docket, FCC 17-108, has 23{,}982{,}072 filings.
-  \item \textbf{Key attributes.} Text, receipt date, each campaign's copy count and sponsor, and the
-        name, city and ZIP of every signer listed in campaign PDFs. ECFS adds filer name and address.
-  \item \textbf{Relevance.} EPA's campaign records show which letters belong together, so they serve
-        as free training and test labels. Signer details let us check whether a
-        campaign's senders look real. An official investigation says which FCC 17-108 campaigns were fake, so we validate there.
-  \item \textbf{Data quality concerns.} Each comment needs its own API call, 11.4 hours per key for
-        the development docket, so we split ingestion across five keys. 106 campaigns attach only one
-        sample letter, so their signers cannot be checked. Dates have no time of day. All 13 PDFs we
-        sampled contain machine-readable text, so OCR is only a fallback.
+  \item \textbf{Source.} Public APIs of Regulations.gov, the FCC's Electronic Comment Filing System
+        (ECFS) and the Federal Register (rule text). Known fakes from the NY AG report [4] and
+        Weiss's 1{,}001 machine-written comments [3].
+  \item \textbf{Description.} Comment text with receipt dates and PDF attachments. The development
+        docket has 11{,}444 records, 201 of them campaigns standing for 507{,}230 comments
+        (\texttt{EPA-HQ-OW-2018-0149}). Validation docket FCC 17-108 has 23{,}982{,}072 filings.
+  \item \textbf{Key attributes.} Text, receipt date, campaign copy count and sponsor, and each
+        signer's name, city and ZIP from campaign PDFs. ECFS adds filer name and address.
+  \item \textbf{Relevance.} EPA's campaign records are free training and test labels. Signer details
+        show whether a campaign's senders look real. The NY AG named which FCC 17-108 campaigns were
+        fake, so we validate there.
+  \item \textbf{Data quality concerns.} One API call per comment takes 11.4 hours per key for the
+        development docket, so we use five keys. 106 campaigns attach only a sample letter, so their
+        signers cannot be checked. Dates have no time of day. All 13 PDFs we sampled have
+        machine-readable text, so OCR is a fallback.
 \end{itemize}
 
 \section{Scope and Objectives}
 
-We cover one Regulations.gov docket end to end and use the FCC docket only for validation. The
-central challenge is that almost nothing is labelled fake, and labelling individuals ourselves would
-risk the harm we want to avoid. We rely instead on labels that already exist (EPA's grouping, the NY
-AG findings, Weiss's comments) and on reworded letters we generate.
+One Regulations.gov docket end to end, with FCC 17-108 for validation. The central challenge is that
+almost nothing is labelled fake, and labelling people ourselves risks the harm we want to avoid. We
+use existing labels (EPA's grouping, the NY AG findings, Weiss's comments) and reworded letters we
+generate. We reuse an open embedding model, HDBSCAN and a hosted LLM, and build the rest.
 
 \begin{enumerate}[leftmargin=1.4em]
   \item \textbf{Ingest} comments and campaign PDFs into one record per letter.
-  \item \textbf{Group} letters into campaigns. MinHash [1], a fast estimate of word overlap between
-        texts, catches near-exact copies. The rest become vectors (\emph{embeddings}) clustered with
-        HDBSCAN, a density-based method that finds groups of any size and leaves outliers out.
+  \item \textbf{Group} letters with MinHash [1], a fast estimate of word overlap that catches
+        near-exact copies. The rest become vectors (\emph{embeddings}) clustered with HDBSCAN, which
+        finds groups of any size and leaves outliers out.
   \item \textbf{Fine-tune our own embedding model.} Stock embeddings miss reworded copies, so we
-        fine-tune the open model \texttt{all-MiniLM-L6-v2}
-        with a contrastive loss, pulling letters from the same EPA campaign together and pushing
-        letters from different campaigns apart. The 95 campaigns not marked as samples (up to
-        441{,}802 letters) supply the training pairs. We hold out 20\% of campaigns entirely for testing.
-  \item \textbf{Characterize} each campaign by its size, arrival by day, how its copies differ
-        (personal text added or words swapped), the sponsor named in its attachments, and signer
-        checks such as a ZIP that does not match the stated city. Campaigns are ranked by how far this
-        profile sits from the docket's typical campaign, so an analyst knows what to read first.
-  \item \textbf{Link} each campaign to the rule provisions it argues about. Retrieval-augmented
-        generation (RAG) finds the passages of the rule text closest to the campaign's letter, and an
-        LLM names the provision, quoting the passage.
+        fine-tune the open model \texttt{all-MiniLM-L6-v2} with a contrastive loss that pulls letters from the same
+        EPA campaign together and pushes other campaigns apart, using the 95 campaigns not marked as
+        samples (up to 441{,}802 letters) and holding out 20\% of campaigns for testing.
+  \item \textbf{Characterize} each campaign by size, arrival by day, how copies differ (added text
+        or swapped words), the sponsor named in its attachments, and signer checks such as a ZIP that
+        does not match the city. Campaigns furthest from the docket's typical profile rank first.
+  \item \textbf{Link} each campaign to the provisions it argues about. RAG (retrieval-augmented
+        generation) finds the closest passages of the rule, and an LLM names the provision.
 \end{enumerate}
 
-We reuse an open embedding model, HDBSCAN and a hosted LLM, and build everything else.
-
-\textbf{Success.} Grouping is scored with \emph{pairwise F1}. Over all pairs of letters, precision is
-the share of pairs we put together that EPA also put together, and recall is the share of EPA's pairs
-we recover. We aim for F1 of 0.95 or better on the held-out campaigns, above exact matching, MinHash
-alone and the untuned model, including on letters reworded at five strengths.
-On FCC 17-108 we measure \emph{recall@k}, the share of the NY AG's fake campaigns among our top $k$.
-For an analyst, success is every campaign and its evidence on one screen instead of keyword search.
+\textbf{Success.} \emph{Pairwise F1} against EPA's grouping, where precision is the share of letter
+pairs we group that EPA also grouped and recall is the share of EPA's pairs we find. Target 0.95 on
+held-out campaigns, above exact matching, MinHash and the untuned model, including on letters reworded
+at five strengths. On FCC 17-108, \emph{recall@k}, the share of the NY AG's fake campaigns in our
+top $k$. For an analyst, every campaign and its evidence on one screen instead of keyword search.
 
 \section{Minimum Components}
 
 \textbf{Large, heterogeneous data.} Half a million letters from two APIs, in text, HTML and PDF.
-\textbf{Scalability.} FCC 17-108 has 24 million filings, so every step streams its input. \textbf{Complex model.} The fine-tuned embedding model, trained on
-Vertex AI and retrained when a new docket is added.
+\textbf{Scalability.} FCC 17-108 has 24 million filings, so every step streams its input.
+\textbf{Complex model.} The fine-tuned embedding model, trained on Vertex AI and retrained per docket.
 
 \section{Learning Emphasis}
 
-Fine-tuning, RAG with a vector database, containers and Vertex AI come from the course. MinHash,
-density clustering and evaluation with few labels are methods we add from outside it.
+From the course, fine-tuning, RAG with a vector database, containers and Vertex AI. From outside it,
+MinHash, density clustering and evaluation with few labels.
 
 \section{Application Mock Design}
 
-Real records from our development docket. We built screen 3 by hand from one campaign's PDF
-attachments, and the pipeline will do this for every campaign.
+Real records from our development docket. We built screen 3 by hand from one campaign's PDFs; the
+pipeline will do it for every campaign.
 
 \begin{center}
-\includegraphics[width=0.66\textwidth]{docs/mock.png}
+\includegraphics[width=0.9\textwidth]{docs/mock.png}
 \end{center}
 
 \section{Fun Factor}
 
-EPA lists no sponsor for 92 campaigns. The first one we opened (66{,}777 comments) was a CREDO
-Action petition.
+EPA lists no sponsor for 92 campaigns. The first one we opened (66{,}777 comments) was a CREDO Action
+petition.
 
 \section{Limitations and Risks}
 
-The worst error is making a genuine campaign look fraudulent, which would harm the group and every
-real person who signed. So the app shows evidence about campaigns and never scores a person. The FCC labels cover only a few campaigns, so results there are
-case studies. Mistakes in EPA's grouping would be learned by the model, so we hand-check a sample.
-LLM-rewritten letters may escape grouping, and the rewording test measures how often.
+Making a genuine campaign look fraudulent would harm the group and every real person who signed, so
+the app shows evidence about campaigns and never scores a person. The FCC labels cover few campaigns,
+so results there are case studies. The model would learn any mistakes in EPA's grouping, so we
+hand-check a sample. LLM-rewritten letters may escape grouping; the rewording test measures how often.
 
 \section{Milestones}
 
-\textbf{Mid Oct (MS2).} Containerized ingestion, data versioning with DVC, RAG flow, MinHash baseline.
+\textbf{Mid Oct (MS2).} Containers, DVC data versioning, RAG flow, MinHash baseline.
 \textbf{Mid Nov (MS3).} Fine-tuning on Vertex AI, grouping results, API on Cloud Run.
 \textbf{Early Dec (MS4).} Campaign evidence, FCC evaluation, frontend, CI and tests.
-\textbf{Mid Dec (MS5).} Kubernetes deployment, automated retraining, video and blog post.
+\textbf{Mid Dec (MS5).} Kubernetes, automated retraining, video and blog post.
 
 \section{Research and Development}
 
