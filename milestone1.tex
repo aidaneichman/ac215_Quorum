@@ -5,7 +5,7 @@
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=0.75in]{geometry}
+\usepackage[hmargin=0.75in,vmargin=0.65in]{geometry}
 \usepackage{microtype}
 \usepackage{graphicx}
 \usepackage{enumitem}
@@ -14,7 +14,7 @@
 \usepackage{titlesec}
 
 \titleformat{\section}{\normalsize\bfseries}{}{0pt}{}[{\vspace{1pt}\titlerule}]
-\titlespacing*{\section}{0pt}{8pt}{3pt}
+\titlespacing*{\section}{0pt}{7pt}{3pt}
 \setlength{\parskip}{3pt}
 \setlength{\parindent}{0pt}
 \setlist{itemsep=2pt, topsep=1pt, parsep=0pt, leftmargin=1.1em}
@@ -62,15 +62,15 @@ and evidence of whether real people sent it, without labelling any individual co
   \item \textbf{Relevance:} EPA's campaign records are free grouping labels, signer details let us
         check whether senders look real, and the FCC docket is the only one where fraud was proven.
   \item \textbf{Data quality concerns:} each comment needs its own API call (11.4 hours per key), so
-        we split ingestion across five keys. 106 campaigns attach only a sample letter, so we can count
-        them but not check their senders. Dates have no time of day. Some PDFs may be scans, though
-        all 13 we sampled had a text layer, so we OCR only where needed.
+        we split ingestion across five keys. 106 campaigns attach only a sample letter, so their senders
+        cannot be checked. Dates have no time of day. All 13 PDFs we sampled had a text layer, so OCR
+        is a fallback.
 \end{itemize}
 
 \section{Scope and Objectives}
 
-One Regulations.gov docket end to end, with the FCC docket for validation only. We are not building a
-fraud classifier, and no individual gets a score.
+One Regulations.gov docket end to end, with the FCC docket for validation only. No fraud classifier,
+and no individual gets a score.
 
 \begin{enumerate}[leftmargin=1.4em]
   \item Ingest comments and campaign PDFs into one record per comment.
@@ -92,20 +92,21 @@ every campaign with its evidence on one screen instead of searching by keyword.
 
 \section{Learning Emphasis}
 
-Locality-sensitive hashing, density clustering, RAG with a vector database, and evaluation without
-ground truth.
+Locality-sensitive hashing, density clustering, RAG with a vector database, evaluation without labels.
 
 \section{Application Mock Design}
 
-Three screens: docket overview, campaign explorer, and the evidence for one campaign.
+Filled in with real records from our development docket. We built screen 3 by hand from one
+campaign's PDF attachments; the pipeline will do this for every campaign.
 
 \begin{center}
-\includegraphics[width=0.7\textwidth]{docs/mock.png}
+\includegraphics[width=\textwidth]{docs/mock.png}
 \end{center}
 
 \section{Fun Factor}
 
-EPA lists no sponsor for 92 campaigns on our docket. We want to find out who sent them.
+EPA lists no sponsor for 92 campaigns. The first we opened (66{,}777 comments) was a CREDO Action
+petition. We want to know who sent the other 91.
 
 \section{Limitations and Risks}
 
