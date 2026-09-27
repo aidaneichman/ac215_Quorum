@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1420 760" width="1420" font-family="'Comic Sans MS','Chalkboard SE','Segoe Print','Bradley Hand',cursive">
+<rect width="1420" height="760" fill="#fffdf7"/>
+<text x="710.0" y="44" font-size="30" font-weight="bold" fill="#1d2f4e" text-anchor="middle">Quorum: application mock</text>
+<text x="710.0" y="72" font-size="16" fill="#7a8699" text-anchor="middle">three screens: pick a docket, explore campaigns, inspect the evidence behind one campaign</text>
+<path d="M31,101 L460,100 L459,692 L29,688 Z" fill="#fff" stroke="#1971c2" stroke-width="3" stroke-linejoin="round"/>
+<path d="M29,99 L459,99 L459,133 L29,134 Z" fill="#1971c2" stroke="#1971c2" stroke-width="2"/>
+<text x="245.0" y="123" font-size="15" font-weight="bold" fill="#fff" text-anchor="middle">1 · DOCKET OVERVIEW</text>
+<path d="M489,98 L919,100 L919,691 L492,690 Z" fill="#fff" stroke="#2b8a3e" stroke-width="3" stroke-linejoin="round"/>
+<path d="M489,101 L921,100 L920,133 L491,135 Z" fill="#2b8a3e" stroke="#2b8a3e" stroke-width="2"/>
+<text x="705.0" y="123" font-size="15" font-weight="bold" fill="#fff" text-anchor="middle">2 · CAMPAIGN EXPLORER</text>
+<path d="M951,102 L1379,100 L1381,692 L949,688 Z" fill="#fff" stroke="#6741d9" stroke-width="3" stroke-linejoin="round"/>
+<path d="M950,99 L1381,99 L1380,134 L949,134 Z" fill="#6741d9" stroke="#6741d9" stroke-width="2"/>
+<text x="1165.0" y="123" font-size="15" font-weight="bold" fill="#fff" text-anchor="middle">3 · EVIDENCE</text>
+<path d="M48,152 L443,153 L443,185 L47,186 Z" fill="#f4f6fa" stroke="#9aa6b8" stroke-width="1.8"/>
+<text x="60" y="174" font-size="14" fill="#4a5568">EPA-HQ-OW-2018-0149</text>
+<text x="414" y="174" font-size="17" fill="#9aa6b8">⌕</text>
+<text x="48" y="214" font-size="14" font-weight="bold" fill="#1d2f4e">11,444 comments · 6 campaigns · 41% coordinated</text>
+<rect x="48" y="230" width="173" height="30" fill="#2b8a3e" opacity=".75"/>
+<rect x="221" y="230" width="162" height="30" fill="#c9741b" opacity=".75"/>
+<rect x="383" y="230" width="59" height="30" fill="#c92a2a" opacity=".75"/>
+<text x="48" y="282" font-size="12.5" fill="#7a8699">● individual   ● coordinated   ● unusual profile</text>
+<text x="48" y="315" font-size="13" font-weight="bold" fill="#4a5568">submissions over time</text>
+<path d="M48,379 L58,382 L68,399 L78,391 L87,396 L97,382 L107,398 L117,380 L127,391 L137,374 L146,388 L156,397 L166,338 L176,338 L186,395 L196,396 L206,374 L215,399 L225,381 L235,398 L245,399 L255,393 L265,393 L275,387 L284,391 L294,398 L304,373 L314,375 L324,342 L334,394 L344,385 L353,379 L363,382 L373,399 L383,375 L393,364 L403,379 L412,390 L422,361 L432,376 L442,395" stroke="#1971c2" stroke-width="2" fill="none"/>
+<path d="M48,402 L442,402" stroke="#9aa6b8" stroke-width="1.5"/>
+<text x="48" y="438" font-size="12.5" fill="#c92a2a">bursts flagged automatically</text>
+<path d="M46,461 L443,459 L441,650 L49,649 Z" fill="#f9fbfd" stroke="#cfd9e8" stroke-width="1.6"/>
+<text x="62" y="486" font-size="12.5" font-weight="bold" fill="#1971c2">TOP CAMPAIGNS</text>
+<text x="62" y="512" font-size="14" font-weight="bold" fill="#c9741b">4,118</text>
+<text x="122" y="512" font-size="13" fill="#4a5568">"I urge the EPA to withdraw..."</text>
+<text x="62" y="544" font-size="14" font-weight="bold" fill="#c9741b">1,902</text>
+<text x="122" y="544" font-size="13" fill="#4a5568">"As a fisherman in the..."</text>
+<text x="62" y="576" font-size="14" font-weight="bold" fill="#c9741b">880</text>
+<text x="122" y="576" font-size="13" fill="#4a5568">"Clean water is not negotiable"</text>
+<text x="62" y="608" font-size="14" font-weight="bold" fill="#c9741b">311</text>
+<text x="122" y="608" font-size="13" fill="#4a5568">"Please reconsider the..."</text>
+<text x="62" y="642" font-size="13" fill="#2b8a3e">4,233 individual comments</text>
+<text x="508" y="158" font-size="13" fill="#7a8699">sorted by campaign profile score</text>
+<text x="508" y="184" font-size="12.5" font-weight="bold" fill="#2b8a3e">cluster</text>
+<text x="640" y="184" font-size="12.5" font-weight="bold" fill="#2b8a3e">size</text>
+<text x="705" y="184" font-size="12.5" font-weight="bold" fill="#2b8a3e">score</text>
+<text x="780" y="184" font-size="12.5" font-weight="bold" fill="#2b8a3e">provision</text>
+<path d="M506,192 L904,192" stroke="#cfd9e8" stroke-width="1.5"/>
+<path d="M506,198 L903,199 L905,235 L506,234 Z" fill="#fbfdfb" stroke="#e3ece5" stroke-width="1.2"/>
+<text x="514" y="221" font-size="13" font-weight="bold" fill="#1d2f4e">C-01</text>
+<text x="642" y="221" font-size="13" fill="#4a5568">4,118</text>
+<rect x="702" y="209" width="54" height="14" fill="#c92a2a" opacity=".8"/>
+<text x="764" y="221" font-size="12" font-weight="bold" fill="#c92a2a">0.96</text>
+<text x="820" y="221" font-size="12.5" fill="#4a5568">§ 402(a)</text>
+<path d="M505,242 L904,242 L903,279 L505,278 Z" fill="#fbfdfb" stroke="#e3ece5" stroke-width="1.2"/>
+<text x="514" y="265" font-size="13" font-weight="bold" fill="#1d2f4e">C-02</text>
+<text x="642" y="265" font-size="13" fill="#4a5568">1,902</text>
+<rect x="702" y="253" width="51" height="14" fill="#c92a2a" opacity=".8"/>
+<text x="764" y="265" font-size="12" font-weight="bold" fill="#c92a2a">0.91</text>
+<text x="820" y="265" font-size="12.5" fill="#4a5568">§ 402(a)</text>
+<path d="M507,286 L905,285 L904,322 L506,322 Z" fill="#fbfdfb" stroke="#e3ece5" stroke-width="1.2"/>
+<text x="514" y="309" font-size="13" font-weight="bold" fill="#1d2f4e">C-03</text>
+<text x="642" y="309" font-size="13" fill="#4a5568">880</text>
+<rect x="702" y="297" width="41" height="14" fill="#c9741b" opacity=".8"/>
+<text x="764" y="309" font-size="12" font-weight="bold" fill="#c9741b">0.74</text>
+<text x="820" y="309" font-size="12.5" fill="#4a5568">§ 117</text>
+<path d="M506,331 L905,329 L904,366 L506,365 Z" fill="#fbfdfb" stroke="#e3ece5" stroke-width="1.2"/>
+<text x="514" y="353" font-size="13" font-weight="bold" fill="#1d2f4e">C-04</text>
+<text x="642" y="353" font-size="13" fill="#4a5568">311</text>
+<rect x="702" y="341" width="29" height="14" fill="#c9741b" opacity=".8"/>
+<text x="764" y="353" font-size="12" font-weight="bold" fill="#c9741b">0.52</text>
+<text x="820" y="353" font-size="12.5" fill="#4a5568">§ 117</text>
+<path d="M506,374 L904,374 L904,410 L505,411 Z" fill="#fbfdfb" stroke="#e3ece5" stroke-width="1.2"/>
+<text x="514" y="397" font-size="13" font-weight="bold" fill="#1d2f4e">C-05</text>
+<text x="642" y="397" font-size="13" fill="#4a5568">96</text>
+<rect x="702" y="385" width="17" height="14" fill="#2b8a3e" opacity=".8"/>
+<text x="764" y="397" font-size="12" font-weight="bold" fill="#2b8a3e">0.31</text>
+<text x="820" y="397" font-size="12.5" fill="#4a5568">§ 9</text>
+<path d="M506,419 L903,418 L904,455 L506,455 Z" fill="#fbfdfb" stroke="#e3ece5" stroke-width="1.2"/>
+<text x="514" y="441" font-size="13" font-weight="bold" fill="#1d2f4e">C-06</text>
+<text x="642" y="441" font-size="13" fill="#4a5568">54</text>
+<rect x="702" y="429" width="12" height="14" fill="#2b8a3e" opacity=".8"/>
+<text x="764" y="441" font-size="12" font-weight="bold" fill="#2b8a3e">0.22</text>
+<text x="820" y="441" font-size="12.5" fill="#4a5568">mixed</text>
+<path d="M506,492 L905,494 L903,655 L507,653 Z" fill="#f4faf5" stroke="#2b8a3e" stroke-width="1.8" stroke-dasharray="6 4"/>
+<text x="520" y="520" font-size="13.5" font-weight="bold" fill="#2b8a3e">C-01 selected</text>
+<text x="520" y="546" font-size="12.5" fill="#4a5568">4,118 near-identical comments</text>
+<text x="520" y="570" font-size="12.5" fill="#4a5568">92% received within 2 days</text>
+<text x="520" y="594" font-size="12.5" fill="#4a5568">addresses § 402(a) only</text>
+<text x="520" y="624" font-size="13" font-weight="bold" fill="#6741d9">→ open evidence panel</text>
+<path d="M967,151 L1362,152 L1360,248 L968,248 Z" fill="#faf8fe" stroke="#cfc4e6" stroke-width="1.6"/>
+<text x="980" y="176" font-size="12.5" fill="#7a8699">campaign C-01 · sample letter</text>
+<text x="980" y="200" font-size="13" fill="#1d2f4e">"I urge the EPA to withdraw the</text>
+<text x="980" y="220" font-size="13" fill="#1d2f4e">proposed rule. Clean water..."</text>
+<text x="980" y="280" font-size="14" font-weight="bold" fill="#6741d9">campaign profile score</text>
+<text x="1340" y="280" font-size="22" font-weight="bold" fill="#c92a2a" text-anchor="end">0.96</text>
+<rect x="980" y="296" width="360" height="16" fill="#eee" rx="3"/>
+<rect x="980" y="296" width="346" height="16" fill="#c92a2a" opacity=".8" rx="3"/>
+<text x="980" y="332" font-size="12.5" fill="#7a8699">95% interval  0.91 – 0.98</text>
+<text x="980" y="372" font-size="13" font-weight="bold" fill="#6741d9">WHY</text>
+<text x="980" y="396" font-size="12.5" fill="#4a5568">exact duplicates</text>
+<rect x="980" y="404" width="360" height="11" fill="#f0eef6" rx="2"/>
+<rect x="980" y="404" width="356" height="11" fill="#6741d9" opacity=".7" rx="2"/>
+<text x="1340" y="396" font-size="12" font-weight="bold" fill="#6741d9" text-anchor="end">0.99</text>
+<text x="980" y="436" font-size="12.5" fill="#4a5568">timing burst</text>
+<rect x="980" y="444" width="360" height="11" fill="#f0eef6" rx="2"/>
+<rect x="980" y="444" width="338" height="11" fill="#6741d9" opacity=".7" rx="2"/>
+<text x="1340" y="436" font-size="12" font-weight="bold" fill="#6741d9" text-anchor="end">0.94</text>
+<text x="980" y="476" font-size="12.5" fill="#4a5568">shared phrasing</text>
+<rect x="980" y="484" width="360" height="11" fill="#f0eef6" rx="2"/>
+<rect x="980" y="484" width="317" height="11" fill="#6741d9" opacity=".7" rx="2"/>
+<text x="1340" y="476" font-size="12" font-weight="bold" fill="#6741d9" text-anchor="end">0.88</text>
+<text x="980" y="516" font-size="12.5" fill="#4a5568">metadata regularity</text>
+<rect x="980" y="524" width="360" height="11" fill="#f0eef6" rx="2"/>
+<rect x="980" y="524" width="148" height="11" fill="#6741d9" opacity=".7" rx="2"/>
+<text x="1340" y="516" font-size="12" font-weight="bold" fill="#6741d9" text-anchor="end">0.41</text>
+<path d="M967,571 L1363,569 L1361,658 L967,656 Z" fill="#fff8e1" stroke="#c9741b" stroke-width="1.8"/>
+<text x="980" y="596" font-size="13" font-weight="bold" fill="#c9741b">NOT a verdict.</text>
+<text x="980" y="618" font-size="12.5" fill="#8a6520">Coordinated ≠ fabricated. Scores</text>
+<text x="980" y="638" font-size="12.5" fill="#8a6520">describe campaigns, not people.</text>
+<text x="710.0" y="736" font-size="14" fill="#7a8699" text-anchor="middle">Wireframe only. Scores attach to campaigns, never to a person, and every score shows its evidence.</text>
+</svg>
