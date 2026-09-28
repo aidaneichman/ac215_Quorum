@@ -79,7 +79,7 @@ and the evidence on whether real people sent it, without labelling any individua
 One Regulations.gov docket end to end, with FCC 17-108 for validation. The central challenge is that
 almost nothing is labelled fake, and labelling people ourselves risks the harm we want to avoid. We
 use existing labels (EPA's grouping, the NY AG findings, Weiss's comments) and reworded letters we
-generate. We reuse an open embedding model, HDBSCAN and a hosted LLM, and build the rest.
+generate. We reuse an open embedding model, HDBSCAN and a hosted LLM, and build the rest (architecture in the appendix).
 
 \begin{enumerate}[leftmargin=1.4em]
   \item \textbf{Ingest} comments and campaign PDFs into one record per letter.
@@ -150,5 +150,16 @@ hand-check a sample. LLM-rewritten letters may escape grouping; the rewording te
 [3] Weiss, \href{https://techscience.org/a/2019121801/}{Deepfake bot submissions to federal public comment websites cannot be distinguished from human submissions}, \emph{Technology Science}, 2019.
 [4] New York Attorney General, \href{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}{report on fake comments in the FCC's 2017 net neutrality proceeding}, 2021.
 \par}
+
+\clearpage
+\section{Appendix: Preliminary Architecture}
+
+A batch pipeline runs once per docket and writes campaigns to a store that the API serves. Training
+runs separately, and a new model replaces the current one only if it scores higher on held-out
+campaigns.
+
+\begin{center}
+\includegraphics[width=\textwidth]{docs/architecture.png}
+\end{center}
 
 \end{document}
