@@ -7,8 +7,11 @@
 \usepackage[T1]{fontenc}
 \usepackage{XCharter}
 \usepackage[scaled=.95]{sourcesanspro}
+\usepackage[scaled=.88]{sourcecodepro}
 \renewcommand{\familydefault}{\rmdefault}
 \usepackage{microtype}
+\frenchspacing
+\usepackage{needspace,fancyhdr,lastpage}
 \usepackage{titlesec,enumitem,booktabs,multicol,graphicx,xcolor}
 \usepackage{xurl}
 \urlstyle{same}
@@ -26,10 +29,12 @@
 \setlist[leads]{label={},leftmargin=0pt,labelsep=0pt,itemsep=4pt,parsep=0pt,topsep=3pt}
 \newcommand{\lead}[1]{\textbf{#1.}\ }
 \setlist[enumerate]{leftmargin=*,label=\textcolor{ink}{\sffamily\bfseries\arabic*.},itemsep=3pt,topsep=3pt}
-\setlist[itemize]{leftmargin=*,itemsep=3pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,label=\textcolor{ink}{\textbullet},itemsep=3pt,topsep=3pt}
 \setlength{\parskip}{4pt}
 \setlength{\parindent}{0pt}
-\pagestyle{empty}
+\pagestyle{fancy}\fancyhf{}\renewcommand{\headrulewidth}{0pt}
+\cfoot{\footnotesize\color{meta}Undersigned \textperiodcentered{} MS1 \textperiodcentered{} \thepage\ of \pageref*{LastPage}}
+\hyphenation{HDBSCAN MinHash}
 \raggedbottom
 \emergencystretch=2em
 \widowpenalty=10000 \clubpenalty=10000 \hyphenpenalty=300
@@ -62,7 +67,7 @@ million comments on the FCC's 2017 net neutrality repeal were fake, four years a
 Agencies post one representative letter per campaign with a count of copies, as the Administrative
 Conference of the United States recommended in 2021 [5]. On our development docket, EPA's 2019
 ``waters of the United States'' rule, that meant 507{,}230 comments filed under 201 campaign records,
-92 of them with no known sponsor.
+92 with no known sponsor.
 
 Near-duplicate detection groups exact copies [1, 6] but not reworded ones, and the 1.3 million likely
 fake FCC comments Kao found were all reworded from one template [2]. Nothing available tells an
@@ -114,7 +119,7 @@ individual comment as fake.
         stress test.
   \item \lead{Data quality concerns} One API call per record means 11.4 hours per key for the
         development docket, so we use five keys, and ECFS takes about 24{,}000 calls paged by date.
-        Four campaign PDFs are scans and need OCR. Signer names are hashed with a secret key and never
+        Four campaign PDFs are scans needing OCR. Signer names are hashed with a secret key and never
         shown.
 \end{leads}
 
@@ -128,13 +133,12 @@ the rest (Appendix B).
 
 \begin{enumerate}
   \item \textbf{Ingest} comments, attachments and signer lists into one record per letter.
-  \item \lead{Group} MinHash [6], a fast estimate of word overlap, collapses near-exact copies to
-        one representative each. We embed the representatives together with the remaining letters and
+  \item \textbf{Group} near-exact copies into one representative each with MinHash [6], a fast
+        estimate of word overlap. We embed the representatives together with the remaining letters and
         cluster them with HDBSCAN, so a reworded letter lands with its template. For FCC 17-108 we
-        cluster a sample stratified by MinHash group size and assign everything else to the nearest
-        cluster.
-  \item \textbf{Fine-tune our own embedding model}, \texttt{bge-small-en-v1.5} [3], which reads 512
-        tokens, enough for the typical 290-token letter and the personal text at its end. It learns with
+        cluster a sample stratified by MinHash group size and assign the rest to the nearest one.
+  \item \textbf{Fine-tune our own embedding model}, starting from \texttt{bge-small-en-v1.5} [3]. It
+        reads 512 tokens, enough for the typical 290-token letter and the personal text at its end, and learns with
         a contrastive loss on real letters, personalized copies as hard positives, and is
         cross-validated by leaving out one of the eight sponsor groups at a time.
   \item \textbf{Characterize} each campaign by size, personalized share, any sponsor named in its
@@ -143,8 +147,8 @@ the rest (Appendix B).
         and averaged, and the ranking says what to read first. It is not a fraud score.
   \item \textbf{Link} each campaign to the rule sections it argues about, trying BM25 first, then
         embedding retrieval, and an LLM only if it beats both.
-  \item \textbf{Serve} a dashboard and a live endpoint that takes a pasted comment and returns its
-        campaign, or none if nothing clears a similarity threshold set on individual comments.
+  \item \textbf{Serve} a dashboard and a live endpoint that returns a pasted comment's campaign,
+        or none below a similarity threshold set on individual comments.
 \end{enumerate}
 
 \section{Success Criteria}
@@ -159,12 +163,13 @@ the rest (Appendix B).
   \item \lead{Transfer} The same comparison on the Clean Power Plan docket, with its five unseen
         sponsors reported separately, and on Kao's FCC cluster [2]. If fine-tuning does not help
         there, we ship the untuned model.
-  \item \lead{Ranking} How many of the NY AG's campaigns land in our top 20 on FCC 17-108, with
-        every false positive listed.
+  \item \lead{Ranking} How many of the NY AG's campaigns land in our top 20 on FCC 17-108, listing
+        every false positive.
   \item \lead{Evidence and links} A hand audit of the 92 campaigns with no known sponsor, and top-1
         accuracy on 50 hand-mapped campaigns, at least half about a specific section.
 \end{leads}
 
+\needspace{9\baselineskip}
 \section{Minimum Components}
 
 \begin{leads}
@@ -190,7 +195,8 @@ be a CREDO Action petition whose cover letter claims 110 more signers than its s
 
 \begin{itemize}
   \item Making a genuine campaign look fraudulent would harm the group and every real signer, so the
-        app ranks campaigns, never people, and shows the evidence behind each rank.
+        app ranks campaigns, never people, shows the evidence behind each rank, and labels each sponsor as
+        recorded by EPA or found in an attachment.
   \item The model would learn EPA's grouping mistakes, so we hand-check 200 letter pairs and 100
         letters flagged as personalized.
   \item The NY AG findings cover few campaigns, so FCC results are case studies, and if the download
@@ -206,7 +212,7 @@ be a CREDO Action petition whose cover letter claims 110 more signers than its s
         evidence, the sponsor audit and a monitored live API on Cloud Run.
   \item \lead{MS4, 1 Dec} Frontend, CI, tests, FCC and Clean Power Plan evaluations.
   \item \lead{MS5, 11 Dec} GKE, CI/CD, gated retraining on the Clean Power Plan docket, video,
-        blog, public test-set release.
+        blog, public test sets.
 \end{leads}
 
 \newgeometry{margin=0.45in,top=0.55in,bottom=0.5in}
@@ -216,17 +222,16 @@ be a CREDO Action petition whose cover letter claims 110 more signers than its s
 
 \begin{center}
 \includegraphics[width=\textwidth]{docs/mock_crop.png}\\[3pt]
-{\fontsize{9}{11}\selectfont\itshape\color{meta} Three screens filled in with real records from the development docket. Screen 3 was
-built by hand from campaign 4291's two PDF attachments.}
+{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure A.} \itshape Real records from the development docket. Screen 3 was built by hand from campaign 4291's two PDFs.}
 \end{center}
 
-\vfill
+\vspace{14pt}
 
 \section*{Appendix B: Preliminary Architecture}
 
 \begin{center}
 \includegraphics[width=\textwidth]{docs/architecture_crop.png}\\[3pt]
-{\fontsize{9}{11}\selectfont\itshape\color{meta} One batch run per docket fills the store the API serves. A model is promoted only if it
+{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure B.} \itshape One batch run per docket fills the store the API serves. A model is promoted only if it
 beats the current one on held-out sponsors.}
 \end{center}
 
@@ -236,13 +241,14 @@ beats the current one on held-out sponsors.}
 
 \begin{multicols}{2}
 \footnotesize
-\setlength{\parskip}{3pt}
-[1] H.~Yang, J.~Callan, S.~Shulman. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{Next steps in near-duplicate detection for eRulemaking}. \emph{dg.o}, 2006.\par
-[2] J.~Kao. \href{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}{More than a million pro-repeal net neutrality comments were likely faked}. Hackernoon, 2017.\par
-[3] S.~Xiao et al. C-Pack: packaged resources to advance general Chinese embedding. 2023. Model: \href{https://huggingface.co/BAAI/bge-small-en-v1.5}{huggingface.co/BAAI/bge-small-en-v1.5}.\par
-[4] New York State Office of the Attorney General. \href{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}{Report on fake comments in the FCC's 2017 net neutrality proceeding}. May 2021.\par
-[5] Administrative Conference of the United States. \href{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}{Recommendation 2021-1: Managing mass, computer-generated, and falsely attributed comments}. 2021.\par
-[6] A.~Broder. On the resemblance and containment of documents. \emph{Compression and Complexity of Sequences}, 1997.\par
+\begin{enumerate}[label={[\arabic*]},leftmargin=1.8em,labelsep=.4em,itemsep=2pt,parsep=0pt,topsep=0pt]
+\item H.~Yang, J.~Callan, S.~Shulman. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{Next steps in near-duplicate detection for eRulemaking}. \emph{dg.o}, 2006.
+\item J.~Kao. \href{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}{More than a million pro-repeal net neutrality comments were likely faked}. Hackernoon, 2017.
+\item S.~Xiao et al. C-Pack: packaged resources to advance general Chinese embedding. 2023. Model: \href{https://huggingface.co/BAAI/bge-small-en-v1.5}{huggingface.co/BAAI/bge-small-en-v1.5}.
+\item New York State Office of the Attorney General. \href{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}{Report on fake comments in the FCC's 2017 net neutrality proceeding}. May 2021.
+\item Administrative Conference of the United States. \href{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}{Recommendation 2021-1: Managing mass, computer-generated, and falsely attributed comments}. 2021.
+\item A.~Broder. On the resemblance and containment of documents. \emph{Compression and Complexity of Sequences}, 1997.
+\end{enumerate}
 \end{multicols}
 
 \end{document}
