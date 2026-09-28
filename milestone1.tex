@@ -32,26 +32,22 @@ ayuan@g.harvard.edu, rishi\_jain@brown.edu}
 
 \section{Background and Motivation}
 
-\textbf{How comments work.} Before changing a regulation, a federal agency must take public comments
-and respond to them. The comments on one rule form a \emph{docket}. Most are \emph{form letters}, one
-text that an organization (the \emph{sponsor}) asks supporters to send. All copies together form a
-\emph{campaign}.
+Before a federal agency changes a regulation, it has to take public comments and respond to them.
+The comments on a rule are collected in a \emph{docket}, and on big rules most of them are
+\emph{form letters}. An advocacy group, the \emph{sponsor}, writes one letter and asks its supporters
+to send it, and all the copies together make up a \emph{campaign}.
 
-\textbf{What goes wrong.} A letter sent by 40{,}000 real members is legitimate. The same letter under
-40{,}000 stolen names is fraud, and the two look identical on arrival. About 18 million of the 22
-million comments on the FCC's 2017 net neutrality repeal were fake. New York's Attorney General
-established this four years later [4].
+That is normal when real people send the letter. It is fraud when the names are stolen, and on
+arrival the two look the same. New York's Attorney General found that about 18 million of the 22
+million comments on the FCC's 2017 net neutrality repeal were fake, four years after the fact [4].
 
-\textbf{The gap.} Regulations.gov offers keyword search, and agencies group form letters by hand. On
-our development docket, EPA's 2019 ``waters of the United States'' rule, staff filed 507{,}230
-comments under 201 campaign records, 92 with no known sponsor. Near-duplicate detection groups copies
-[1] but misses reworded ones, and the 1.3 million likely fake FCC comments Kao found were all reworded
-[2]. Nothing says who is behind a campaign or whether its signers are real. Genuine campaigns get
-discounted with fake ones, and fraud surfaces years late.
-
-\textbf{Stakeholders.} Agency staff who must answer the record, the journalists and attorneys general
-who audit it, and advocacy groups whose real members lose their voice. Kao's analysis [2] and the NY
-AG report [4] drew us to the problem.
+Agencies do group form letters, by hand. On our development docket, EPA's 2019 ``waters of the United
+States'' rule, staff filed 507{,}230 comments under 201 campaign records and listed no sponsor for 92
+of them. Near-duplicate detection finds copies [1] but not reworded ones, and the 1.3 million likely
+fake FCC comments Kao found were all reworded [2]. No existing tool says who is behind a campaign or
+whether its signers are real. The people who need that are agency staff answering the record,
+journalists and attorneys general auditing it, and advocacy groups whose genuine campaigns get written
+off alongside fake ones. We came to the problem through Kao's analysis [2] and the NY AG report [4].
 
 \section{Problem Statement}
 
