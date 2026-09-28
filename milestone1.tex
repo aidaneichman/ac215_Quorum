@@ -204,29 +204,40 @@ file lists.
         leave-one-sponsor-out scores, video, blog, public test-set release.
 \end{itemize}
 
+\newgeometry{letterpaper,margin=0.45in,top=0.55in,bottom=0.5in}
 \onecolumn
-
-\section*{References}
-
-{\footnotesize
-[1] H. Yang, J. Callan, S. Shulman. Next steps in near-duplicate detection for eRulemaking. dg.o 2006. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{https://www.cs.cmu.edu/$\sim$callan/Papers/dgo06-huiyang.pdf}\par
-[2] J. Kao. More than a million pro-repeal net neutrality comments were likely faked. Hackernoon, 2017. \url{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}\par
-[3] S. Xiao et al. C-Pack: packaged resources to advance general Chinese embedding (BGE models). 2023. \url{https://huggingface.co/BAAI/bge-small-en-v1.5}\par
-[4] New York State Office of the Attorney General. Fake comments report, FCC 2017 net neutrality proceeding. May 2021. \url{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}\par
-[5] Administrative Conference of the United States. Recommendation 2021-1, Managing mass, computer-generated, and falsely attributed comments. \url{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}\par
-[6] A. Broder. On the resemblance and containment of documents. Compression and Complexity of Sequences, 1997.\par}
-
 
 \section*{Appendix A: Application Mock}
 
 \begin{center}
-\includegraphics[width=\textwidth]{docs/mock.png}
+\includegraphics[width=\textwidth]{docs/mock_crop.png}\\[3pt]
+{\small\itshape Three screens filled in with real records from the development docket. Screen 3 was
+built by hand from campaign 4291's two PDF attachments.}
 \end{center}
+
+\vfill
 
 \section*{Appendix B: Preliminary Architecture}
 
 \begin{center}
-\includegraphics[width=\textwidth]{docs/architecture.png}
+\includegraphics[width=\textwidth]{docs/architecture_crop.png}\\[3pt]
+{\small\itshape One batch run per docket fills the store the API serves. A model is promoted only if it
+beats the current one on held-out sponsors.}
 \end{center}
+
+\vfill
+
+\section*{References}
+
+\begin{multicols}{2}
+\footnotesize
+\setlength{\parskip}{3pt}
+[1] H.~Yang, J.~Callan, S.~Shulman. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{Next steps in near-duplicate detection for eRulemaking}. \emph{dg.o}, 2006.\par
+[2] J.~Kao. \href{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}{More than a million pro-repeal net neutrality comments were likely faked}. Hackernoon, 2017.\par
+[3] S.~Xiao et al. C-Pack: packaged resources to advance general Chinese embedding. 2023. Model: \href{https://huggingface.co/BAAI/bge-small-en-v1.5}{huggingface.co/BAAI/bge-small-en-v1.5}.\par
+[4] New York State Office of the Attorney General. \href{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}{Report on fake comments in the FCC's 2017 net neutrality proceeding}. May 2021.\par
+[5] Administrative Conference of the United States. \href{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}{Recommendation 2021-1: Managing mass, computer-generated, and falsely attributed comments}. 2021.\par
+[6] A.~Broder. On the resemblance and containment of documents. \emph{Compression and Complexity of Sequences}, 1997.\par
+\end{multicols}
 
 \end{document}
