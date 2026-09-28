@@ -11,7 +11,7 @@
 \renewcommand{\familydefault}{\rmdefault}
 \usepackage{microtype}
 \frenchspacing
-\usepackage{needspace,fancyhdr,lastpage}
+\usepackage{needspace,fancyhdr,lastpage,balance}
 \usepackage{titlesec,enumitem,booktabs,multicol,graphicx,xcolor}
 \usepackage{xurl}
 \urlstyle{same}
@@ -89,14 +89,14 @@ individual comment as fake.
   \item \lead{Description} A \emph{record} is one Regulations.gov posting or ECFS filing, a
         \emph{comment} is one person's submission, a \emph{letter} is a comment whose full text we
         have, and a \emph{signer} is a name, city and ZIP in a signer list. The development docket
-        (\texttt{EPA-HQ-OW-2018-0149}) has 11{,}444 records standing for 518{,}473 comments, which are
+        (\texttt{EPA-HQ-OW-2018-0149}) has 11{,}444 records standing for 518{,}473 comments, made up of
         11{,}243 individual comments and 201 campaign records covering the other 507{,}230.
 
         \par\smallskip
         {\small
         \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}rrl@{}}
         \toprule
-        {\sffamily\bfseries\footnotesize Records} & {\sffamily\bfseries\footnotesize Comments} & {\sffamily\bfseries\footnotesize Campaign attachment} \\
+        \multicolumn{1}{r}{\sffamily\bfseries\footnotesize Records} & \multicolumn{1}{r}{\sffamily\bfseries\footnotesize Comments} & {\sffamily\bfseries\footnotesize Campaign attachment} \\
         \midrule
         13 & 117{,}719 & every letter ($\approx$114{,}000) \\
         8 & 295{,}647 & a signer list \\
@@ -119,8 +119,7 @@ individual comment as fake.
         stress test.
   \item \lead{Data quality concerns} One API call per record means 11.4 hours per key for the
         development docket, so we use five keys, and ECFS takes about 24{,}000 calls paged by date.
-        Four campaign PDFs are scans needing OCR. Signer names are hashed with a secret key and never
-        shown.
+        Four campaign PDFs are scans needing OCR. Signer names are hashed with a secret key, never shown.
 \end{leads}
 
 \section{Scope and Objectives}
@@ -129,7 +128,7 @@ A campaign is the set of comments sharing a template and a sponsor. EPA grouped 
 grouping is our label, and cases where the two disagree are reported rather than forced. The central
 challenge is recognizing one campaign across personalized and reworded letters without judging any
 individual commenter. We reuse an open embedding model, HDBSCAN, BM25 and a hosted LLM, and build
-the rest (Appendix B).
+the rest. Appendix B shows the architecture.
 
 \begin{enumerate}
   \item \textbf{Ingest} comments, attachments and signer lists into one record per letter.
@@ -139,7 +138,7 @@ the rest (Appendix B).
         cluster a sample stratified by MinHash group size and assign the rest to the nearest one.
   \item \textbf{Fine-tune our own embedding model}, starting from \texttt{bge-small-en-v1.5} [3]. It
         reads 512 tokens, enough for the typical 290-token letter and the personal text at its end, and learns with
-        a contrastive loss on real letters, personalized copies as hard positives, and is
+        a contrastive loss on real letters, personalized copies as hard positives. It is
         cross-validated by leaving out one of the eight sponsor groups at a time.
   \item \textbf{Characterize} each campaign by size, personalized share, any sponsor named in its
         attachments, timing where comments have their own dates, and signer checks such as ZIPs outside
@@ -151,6 +150,7 @@ the rest (Appendix B).
         or none below a similarity threshold set on individual comments.
 \end{enumerate}
 
+\balance
 \section{Success Criteria}
 
 \begin{leads}
@@ -169,7 +169,6 @@ the rest (Appendix B).
         accuracy on 50 hand-mapped campaigns, at least half about a specific section.
 \end{leads}
 
-\needspace{9\baselineskip}
 \section{Minimum Components}
 
 \begin{leads}
@@ -184,8 +183,8 @@ the rest (Appendix B).
 \paragraph{Learning emphasis} Fine-tuning, RAG, containers and Vertex AI from the course, and
 MinHash, density clustering and label-scarce evaluation from outside it.
 
-\paragraph{Application mock} Appendix A, from real records. We built screen 3 by hand, and the
-pipeline will automate it.
+\paragraph{Application mock} Appendix A uses real records. We built screen 3 by hand, and the
+pipeline will produce it for every campaign.
 
 \paragraph{Fun factor} We get to answer a question that took a state attorney general four years and
 subpoenas. The first campaign with no known sponsor that we opened, 66{,}777 comments, turned out to
@@ -215,24 +214,22 @@ be a CREDO Action petition whose cover letter claims 110 more signers than its s
         blog, public test sets.
 \end{leads}
 
-\newgeometry{margin=0.45in,top=0.55in,bottom=0.5in}
 \onecolumn
 
 \section*{Appendix A: Application Mock}
 
 \begin{center}
-\includegraphics[width=\textwidth]{docs/mock_crop.png}\\[3pt]
+\makebox[\textwidth]{\includegraphics[width=7.4in]{docs/mock_crop.png}}\\[3pt]
 {\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure A.} \itshape Real records from the development docket. Screen 3 was built by hand from campaign 4291's two PDFs.}
 \end{center}
 
-\vspace{14pt}
+\vfill
 
 \section*{Appendix B: Preliminary Architecture}
 
 \begin{center}
-\includegraphics[width=\textwidth]{docs/architecture_crop.png}\\[3pt]
-{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure B.} \itshape One batch run per docket fills the store the API serves. A model is promoted only if it
-beats the current one on held-out sponsors.}
+\makebox[\textwidth]{\includegraphics[width=7.4in]{docs/architecture_crop.png}}\\[3pt]
+{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure B.} \itshape One batch run per docket fills the store the API serves. A new model must beat the current one on held-out sponsors.}
 \end{center}
 
 \vfill
