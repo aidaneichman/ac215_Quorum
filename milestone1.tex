@@ -1,37 +1,41 @@
 % Undersigned, AC215 Milestone 1 statement of work. PDF to Canvas by 9:00 PM, 29 Sep. Limit 3 pages.
-% Dev docket numbers measured against the Regulations.gov API, 20 and 27 Sep 2026.
+% Dev docket numbers measured against the Regulations.gov API, 20 to 28 Sep 2026.
+% Layout: pages 1-2 in two columns, page 3 single column (milestones, references, appendices).
 
-\documentclass[10pt]{article}
-
+\documentclass[10pt,twocolumn]{article}
+\usepackage[letterpaper,margin=0.7in,columnsep=0.28in]{geometry}
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage[hmargin=0.75in,vmargin=0.5in]{geometry}
+\usepackage{XCharter}
 \usepackage{microtype}
-\usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{enumitem}
-\usepackage{xcolor}
+\usepackage{titlesec,enumitem,booktabs,multicol,graphicx,xcolor}
 \usepackage{xurl}
-\usepackage[colorlinks=true,allcolors=blue!60!black]{hyperref}
-\usepackage{titlesec}
+\usepackage[document]{ragged2e}
+\usepackage[colorlinks=true,allcolors=blue!55!black]{hyperref}
 
-\titleformat{\section}{\normalsize\bfseries}{}{0pt}{}[{\vspace{1pt}\titlerule}]
-\titlespacing*{\section}{0pt}{5pt}{2pt}
-\setlength{\parskip}{5pt}
+\titleformat{\section}{\bfseries\large}{}{0pt}{}
+\titlespacing*{\section}{0pt}{8pt}{2pt}
+\titleformat{\paragraph}[runin]{\bfseries}{}{0pt}{}[.]
+\titlespacing*{\paragraph}{0pt}{5pt}{4pt}
+
+\setlist{leftmargin=*,itemsep=2pt,parsep=0pt,topsep=3pt}
+\setlength{\parskip}{4pt}
 \setlength{\parindent}{0pt}
-\setlist{itemsep=4pt, topsep=3pt, parsep=0pt, leftmargin=1.1em}
 \pagestyle{empty}
 \emergencystretch=2em
 
 \begin{document}
 
+\twocolumn[{%
 \begin{center}
-{\Large\bfseries Undersigned: Who Is Behind a Public Comment Campaign?}\\[4pt]
-Aidan Eichman, Aadil Jamari, Livia Jonnatan, Andrew Yuan, Rishi Jain\\[1pt]
-{\footnotesize aidaneichman@g.harvard.edu, ajamari@g.harvard.edu, liviajonnatan@g.harvard.edu,
-ayuan@g.harvard.edu, rishi\_jain@brown.edu}\\[1pt]
-{\footnotesize Team Undersigned \textperiodcentered{} AC215, Fall 2026 \textperiodcentered{} Milestone 1, 29 September 2026}
+{\LARGE\bfseries Undersigned: Who Is Behind a Public Comment Campaign?}\\[5pt]
+Aidan Eichman, Aadil Jamari, Livia Jonnatan, Andrew Yuan, Rishi Jain\\[2pt]
+{\footnotesize aidaneichman@g.harvard.edu \textperiodcentered{} ajamari@g.harvard.edu \textperiodcentered{}
+liviajonnatan@g.harvard.edu \textperiodcentered{} ayuan@g.harvard.edu \textperiodcentered{}
+rishi\_jain@brown.edu}\\[2pt]
+{\small Team Undersigned \textperiodcentered{} AC215, Fall 2026 \textperiodcentered{} Milestone 1, 29 September 2026}
 \end{center}
+\vspace{6pt}
+}]
 
 \section{Background and Motivation}
 
@@ -55,10 +59,9 @@ analyst who is behind a campaign or whether its signers look real. Our primary u
 analyst who has to summarize and answer the comment record; journalists, attorneys general and
 advocacy groups benefit too. Kao's analysis and the NY AG report drew us to the problem.
 
-\section{Problem Statement}
-
-Given a rulemaking docket, find its comment campaigns and show each one's size, timing, arguments,
-and the evidence on whether real people sent it, without labelling any individual comment as fake.
+\paragraph{Problem statement} Given a rulemaking docket, find its comment campaigns and show each
+one's size, timing, arguments, and the evidence on whether real people sent it, without labelling any
+individual comment as fake.
 
 \section{Data Sources}
 
@@ -76,10 +79,10 @@ and the evidence on whether real people sent it, without labelling any individua
         {\small
         \begin{tabular}{@{}rrl@{}}
         \toprule
-        \textbf{Campaign records} & \textbf{Comments} & \textbf{What the attachment contains} \\
+        \textbf{Records} & \textbf{Comments} & \textbf{Campaign attachment} \\
         \midrule
-        13 & 117{,}719 & every letter (about 114{,}000 texts) \\
-        8 & 295{,}647 & a signer list or spreadsheet \\
+        13 & 117{,}719 & every letter ($\approx$114{,}000) \\
+        8 & 295{,}647 & a signer list \\
         180 & 93{,}864 & one sample letter \\
         \bottomrule
         \end{tabular}}
@@ -88,8 +91,8 @@ and the evidence on whether real people sent it, without labelling any individua
         name, city and ZIP. We keep no street addresses.
   \item \textbf{Relevance.} EPA's grouping labels about 114{,}000 letters with their campaign. About
         1{,}700 are \emph{personalized}, with the sender's own words added, and at a MinHash threshold
-        of 0.8 only 7\% of those still match their template. \emph{Reworded} letters, rewritten by an
-        LLM, form a separate stress test.
+        of 0.8 only 7\% still match their template. \emph{Reworded} letters, rewritten by an LLM, are
+        a separate stress test.
   \item \textbf{Data quality concerns.} One API call per record means 11.4 hours per key for the
         development docket, so we use five keys. ECFS pages by date slice: about 24{,}000 calls, 5
         hours across five keys. Four campaign PDFs are scans and need OCR. Signer names are hashed
@@ -104,7 +107,7 @@ rather than force it. The central challenge is recognizing the same campaign acr
 reworded letters without making judgments about individual commenters. We reuse an open embedding
 model, HDBSCAN, BM25 and a hosted LLM, and build the rest (Appendix B).
 
-\begin{enumerate}[leftmargin=1.4em]
+\begin{enumerate}
   \item \textbf{Ingest} comments, attachments and signer lists into one record per letter.
   \item \textbf{Group.} MinHash [6], a fast estimate of word overlap, collapses near-exact copies to
         one representative each. Representatives and all remaining letters are embedded and clustered
@@ -114,19 +117,20 @@ model, HDBSCAN, BM25 and a hosted LLM, and build the rest (Appendix B).
         median letter is about 290 and personal text usually comes last), with a contrastive loss on
         real, deduplicated letters, personalized copies as hard positives. The 13 full campaigns come
         from seven named sponsors plus unknowns, so we use leave-one-sponsor-out cross-validation.
-  \item \textbf{Characterize} each campaign by size, share of copies with personal text, sponsor
-        named in an attachment and, where signer lists exist, ZIP codes outside the stated state,
-        names on several campaigns, and claimed versus listed signer counts. Timing is used only where
-        each comment has its own date. Features are scored in median absolute deviations from the
-        docket median, averaged, and ranked within groups of campaigns with the same features. The
-        rank suggests what to read first; it is not a fraud score.
+  \item \textbf{Characterize} each campaign: size, share of personalized copies, sponsor named in an
+        attachment, timing where comments carry their own dates, and signer checks (ZIPs outside the
+        stated state, names on several campaigns, claimed vs.\ listed counts). Features are scored in
+        median absolute deviations from the docket and averaged. The rank suggests what to read
+        first; it is not a fraud score.
   \item \textbf{Link} each campaign to the rule sections it argues about: BM25 first, then
         embedding retrieval, and an LLM only if it beats both.
   \item \textbf{Serve} a dashboard and a live endpoint: paste a comment, get its campaign or ``none''.
 \end{enumerate}
 
-\textbf{Success.}
+\section{Success Criteria}
+
 \begin{itemize}
+  \item \textbf{For the analyst.} Every campaign and its evidence on one screen, not keyword search.
   \item \textbf{Grouping.} \emph{B-cubed F1}, which averages precision and recall over letters, on the
         held-out sponsor's personalized letters, against exact match, MinHash at 0.5 and 0.8, and the
         untuned model.
@@ -137,38 +141,31 @@ model, HDBSCAN, BM25 and a hosted LLM, and build the rest (Appendix B).
         FCC cluster [2]. If fine-tuning does not help there, we ship the untuned model.
   \item \textbf{Ranking.} Recall of the NY AG's campaigns in our top 20 on FCC 17-108, with every
         false positive listed.
-  \item \textbf{Evidence and links.} Hand audit of the 92 unknown-sponsor campaigns; top-1 accuracy on 50
-        hand-mapped campaigns, at least half about a specific section.
+  \item \textbf{Evidence and links.} Hand audit of the 92 unknown-sponsor campaigns; top-1 accuracy
+        on 50 hand-mapped campaigns, at least half about a specific section.
 \end{itemize}
-
-For the analyst, success is every campaign and its evidence on one screen instead of keyword search.
 
 \section{Minimum Components}
 
 \begin{itemize}
   \item \textbf{Large, heterogeneous data.} Half a million EPA comments and 24 million FCC filings
         from three APIs, in text, HTML, PDF, spreadsheets and scans.
-  \item \textbf{Scalability.} Sample-then-assign clustering for FCC 17-108; a stateless API that scales
-        with users on Cloud Run, then GKE.
-  \item \textbf{Complex model.} Few, noisy labels (13 full-text campaigns grouped by hand at EPA) and a
-        model that must transfer to unseen dockets.
+  \item \textbf{Scalability.} Sample-then-assign clustering for FCC 17-108; a stateless API on
+        Cloud Run, then GKE.
+  \item \textbf{Complex model.} Few, noisy labels (13 full-text campaigns grouped by hand at EPA) and
+        a model that must transfer to unseen dockets.
 \end{itemize}
 
-\section{Learning Emphasis}
+\paragraph{Learning emphasis} From the course, fine-tuning, retrieval and RAG, containers and Vertex
+AI. From outside it, MinHash, density clustering and clustering evaluation without clean labels.
 
-From the course, fine-tuning, retrieval and RAG, containers and Vertex AI. From outside it, MinHash,
-density clustering and clustering evaluation without clean labels.
+\paragraph{Application mock} Appendix A, filled in with real records. We built screen 3 by hand from
+one campaign's PDFs; the pipeline will do it for every campaign.
 
-\section{Application Mock Design}
-
-Appendix A, filled in with real records. We built screen 3 by hand from one campaign's PDFs; the
-pipeline will do it for every campaign.
-
-\section{Fun Factor}
-
-We get to answer, docket by docket, a question that took a state attorney general four years and
-subpoenas. The first unknown-sponsor campaign we opened (66{,}777 comments) turned out to be a CREDO
-Action petition whose cover letter claims 110 more signers than its signer file lists.
+\paragraph{Fun factor} We get to answer, docket by docket, a question that took a state attorney
+general four years and subpoenas. The first unknown-sponsor campaign we opened (66{,}777 comments)
+turned out to be a CREDO Action petition whose cover letter claims 110 more signers than its signer
+file lists.
 
 \section{Limitations and Risks}
 
@@ -185,35 +182,36 @@ Action petition whose cover letter claims 110 more signers than its signer file 
 \section{Milestones}
 
 \begin{itemize}
-  \item \textbf{MS2 (20 Oct, LLM track).} Containerized ingestion with DVC, FCC download started, hand
-        labels, MinHash, untuned and BM25 baselines, vector DB, app skeleton.
-  \item \textbf{MS3 (12 Nov).} Fine-tuning on Vertex AI with W\&B, Vertex pipeline, campaign evidence,
-        sponsor audit, live API on Cloud Run with monitoring.
-  \item \textbf{MS4 (1 Dec).} Frontend, CI and tests, FCC and Clean Power Plan evaluations.
-  \item \textbf{MS5 (11 Dec).} GKE scaling, retraining shown on the Clean Power Plan docket, video, blog.
+  \item \textbf{MS2, 20 Oct (LLM track).} Containers, DVC, FCC download, hand labels, MinHash,
+        untuned and BM25 baselines, vector DB, app skeleton.
+  \item \textbf{MS3, 12 Nov.} Fine-tuning on Vertex AI with W\&B, Vertex pipeline, campaign
+        evidence, sponsor audit, live API on Cloud Run.
+  \item \textbf{MS4, 1 Dec.} Frontend, CI and tests, FCC and Clean Power Plan evaluations.
+  \item \textbf{MS5, 11 Dec.} GKE, retraining on the Clean Power Plan docket, video, blog.
 \end{itemize}
 
-\section{Research and Development}
+\section{References}
 
 {\footnotesize
-[1] H. Yang, J. Callan, S. Shulman. Next steps in near-duplicate detection for eRulemaking. dg.o 2006. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{cs.cmu.edu/\textasciitilde callan/Papers/dgo06-huiyang.pdf}\par
+[1] H. Yang, J. Callan, S. Shulman. Next steps in near-duplicate detection for eRulemaking. dg.o 2006. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{cs.cmu.edu}\par
 [2] J. Kao. More than a million pro-repeal net neutrality comments were likely faked. Hackernoon, 2017. \href{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}{hackernoon.com}\par
-[3] S. Xiao et al. C-Pack: packaged resources to advance general Chinese embedding (BGE models). 2023. \href{https://huggingface.co/BAAI/bge-small-en-v1.5}{huggingface.co/BAAI/bge-small-en-v1.5}\par
-[4] New York State Office of the Attorney General. Fake comments report, FCC 2017 net neutrality proceeding. May 2021. \href{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}{ag.ny.gov}\par
-[5] Administrative Conference of the United States. Recommendation 2021-1, Managing Mass, Computer-Generated, and Falsely Attributed Comments. \href{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}{acus.gov}\par
-[6] A. Broder. On the resemblance and containment of documents. Compression and Complexity of Sequences, 1997.
-\par}
+[3] S. Xiao et al. C-Pack: packaged resources to advance general Chinese embedding (BGE). 2023. \href{https://huggingface.co/BAAI/bge-small-en-v1.5}{huggingface.co/BAAI/bge-small-en-v1.5}\par
+[4] NY State Office of the Attorney General. Fake comments report, FCC 2017 net neutrality proceeding. May 2021. \href{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}{ag.ny.gov}\par
+[5] Administrative Conference of the United States. Recommendation 2021-1, Managing mass, computer-generated, and falsely attributed comments. \href{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}{acus.gov}\par
+[6] A. Broder. On the resemblance and containment of documents. Compression and Complexity of Sequences, 1997.\par}
 
-\section{Appendix A: Application Mock}
+\onecolumn
+
+\section*{Appendix A: Application Mock}
 
 \begin{center}
-\includegraphics[width=0.82\textwidth]{docs/mock.png}
+\includegraphics[width=\textwidth]{docs/mock.png}
 \end{center}
 
-\section{Appendix B: Preliminary Architecture}
+\section*{Appendix B: Preliminary Architecture}
 
 \begin{center}
-\includegraphics[width=0.82\textwidth]{docs/architecture.png}
+\includegraphics[width=\textwidth]{docs/architecture.png}
 \end{center}
 
 \end{document}
