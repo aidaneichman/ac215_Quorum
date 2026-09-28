@@ -65,8 +65,8 @@
   <rect class="ours" x="850" y="70" width="300" height="120"/>
   <text class="tb" x="866" y="98">campaign-builder</text>
   <text class="s" x="866" y="124">Embed representatives and the</text>
-  <text class="s" x="866" y="144">rest together, HDBSCAN; compute</text>
-  <text class="s" x="866" y="164">evidence and rank campaigns</text>
+  <text class="s" x="866" y="144">rest; HDBSCAN (sample, then assign</text>
+  <text class="s" x="866" y="164">at FCC scale); evidence and rank</text>
 
   <!-- GCS + DVC -->
   <rect class="store" x="290" y="212" width="520" height="56"/>
@@ -78,14 +78,14 @@
   <text class="t" x="56" y="388">Labels</text>
   <text class="s" x="56" y="414">Training: EPA campaigns,</text>
   <text class="s" x="56" y="434">leave-one-sponsor-out</text>
-  <text class="s" x="56" y="464">Untouched until final:</text>
-  <text class="s" x="56" y="484">NY AG, Weiss, Kao,</text>
+  <text class="s" x="56" y="464">Held out: Clean Power Plan</text>
+  <text class="s" x="56" y="484">docket, NY AG, Kao cluster,</text>
   <text class="s" x="56" y="504">LLM-reworded letters</text>
 
   <rect class="ours" x="290" y="360" width="240" height="160"/>
   <text class="tb" x="306" y="388">model-training</text>
   <text class="s" x="306" y="414">Contrastive fine-tuning</text>
-  <text class="s" x="306" y="434">of all-MiniLM-L6-v2 on</text>
+  <text class="s" x="306" y="434">of bge-small-en-v1.5 on</text>
   <text class="s" x="306" y="454">EPA campaigns; personalized</text>
   <text class="s" x="306" y="474">copies as hard positives</text>
 
@@ -93,8 +93,8 @@
   <text class="t" x="586" y="388">evaluation</text>
   <text class="s" x="586" y="414">B-cubed F1 vs exact match,</text>
   <text class="s" x="586" y="434">MinHash, untuned model;</text>
-  <text class="s" x="586" y="454">precision and recall at 20</text>
-  <text class="s" x="586" y="474">on FCC 17-108</text>
+  <text class="s" x="586" y="454">transfer to a second docket;</text>
+  <text class="s" x="586" y="474">recall in top 20 on FCC</text>
 
   <rect class="store" x="850" y="360" width="300" height="160"/>
   <text class="t" x="866" y="388">Model registry</text>
@@ -112,8 +112,8 @@
 
   <rect class="ours" x="1210" y="226" width="350" height="96"/>
   <text class="tb" x="1226" y="254">api-service</text>
-  <text class="s" x="1226" y="280">FastAPI; live comment-to-campaign</text>
-  <text class="s" x="1226" y="300">match; links campaigns to rule text</text>
+  <text class="s" x="1226" y="280">FastAPI; live match with the fine-</text>
+  <text class="s" x="1226" y="300">tuned model, or &#8220;no campaign&#8221;</text>
 
   <rect class="ext" x="1210" y="344" width="160" height="60"/>
   <text class="t" x="1226" y="370">Gemini</text>
