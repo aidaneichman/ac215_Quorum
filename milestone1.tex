@@ -5,11 +5,11 @@
 \documentclass[10pt,twocolumn]{article}
 \usepackage[letterpaper,margin=0.7in,columnsep=0.28in]{geometry}
 \usepackage[T1]{fontenc}
-\usepackage{XCharter}
+\usepackage[default,semibold,scaled=.96]{sourceserifpro}
 \usepackage[scaled=.95]{sourcesanspro}
 \usepackage[scaled=.88]{sourcecodepro}
-\renewcommand{\familydefault}{\rmdefault}
-\usepackage{microtype}
+\usepackage{iftex}
+\ifPDFTeX\usepackage[protrusion=true,expansion=true]{microtype}\else\usepackage{microtype}\fi
 \frenchspacing
 \usepackage{needspace,fancyhdr,lastpage,balance}
 \usepackage{titlesec,enumitem,booktabs,multicol,graphicx,xcolor}
@@ -90,7 +90,7 @@ individual comment as fake.
         \emph{comment} is one person's submission, a \emph{letter} is a comment whose full text we
         have, and a \emph{signer} is a name, city and ZIP in a signer list. The development docket
         (\texttt{EPA-HQ-OW-2018-0149}) has 11{,}444 records standing for 518{,}473 comments, made up of
-        11{,}243 individual comments and 201 campaign records covering the other 507{,}230.
+        11{,}243 individual comments and 201 campaign records covering 507{,}230 more.
 
         \par\smallskip
         {\small
