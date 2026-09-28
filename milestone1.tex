@@ -72,13 +72,14 @@ and the evidence on whether real people sent it, without labelling any individua
         docket (\texttt{EPA-HQ-OW-2018-0149}) has 11{,}444 records standing for 518{,}473 comments:
         11{,}243 individual comments and 201 campaign records covering 507{,}230 more. Of those
         campaigns, 13 attach every letter (about 116{,}000), 8 attach a signer list or spreadsheet
-        (295{,}647 comments) and 180 attach one sample letter or nothing. FCC 17-108 lists 23{,}982{,}072
-        filings, of which Kao estimated fewer than 800{,}000 are distinct texts [2].
+        (295{,}647 comments) and 180 attach one sample letter or nothing. ECFS lists 23{,}982{,}072 filings
+        for FCC 17-108, more than the 22 million comments the NY AG counted, and Kao estimated fewer
+        than 800{,}000 distinct texts among them [2].
   \item \textbf{Key attributes.} Letter text, receipt date, sponsor and copy count per campaign, and
-        signer name, city and ZIP. ECFS adds filer name, address and timestamp.
+        signer name, city and ZIP. ECFS adds filer name, ZIP and timestamp; we keep no street addresses.
   \item \textbf{Relevance.} EPA's grouping labels about 116{,}000 letters with their campaign, and the
-        copies are not all identical: in six of the full campaigns, 1{,}955 letters differ from their
-        template by more than 10\% in length because senders added their own words. Signer lists let
+        copies are not all identical: in six of the full campaigns, about 2{,}000 letters differ from
+        their template by more than 10\% in length because senders added their own words. Signer lists let
         us check whether a campaign's senders look real. The NY AG findings say which FCC campaigns
         were fake, so FCC 17-108 is our external test.
   \item \textbf{Data quality concerns.} Fetching one comment takes one API call, 11.4 hours per key for
@@ -93,8 +94,8 @@ and the evidence on whether real people sent it, without labelling any individua
 One Regulations.gov docket end to end, with FCC 17-108 used only for external validation. We define a
 campaign as comments sharing a template and a sponsor. EPA's grouping follows templates, so it is our
 label, and where one sponsor runs two templates or two sponsors share one, we report the case rather
-than force it. The central challenge is that almost nothing is labelled fake, and labelling people
-ourselves would risk the harm we want to avoid. We train only on EPA's grouping and keep the NY AG
+than force it. The central challenge is recognizing the same campaign across personalized and reworded letters
+without making judgments about individual commenters. We train only on EPA's grouping and keep the NY AG
 findings, Weiss's comments and Kao's cluster untouched until final evaluation. We reuse an open
 embedding model, HDBSCAN, BM25 and a hosted LLM, and build the rest (architecture in Appendix B).
 
@@ -106,14 +107,17 @@ embedding model, HDBSCAN, BM25 and a hosted LLM, and build the rest (architectur
         runs on distinct texts, not on 24 million filings.
   \item \textbf{Fine-tune our own embedding model.} We fine-tune \texttt{all-MiniLM-L6-v2} with a
         contrastive loss that pulls letters from the same EPA campaign together and pushes other
-        campaigns apart, using the personalized copies as hard positives. Campaigns are split
-        60/20/20 into train, validation and test by sponsor, so no sponsor's text appears on both
-        sides, and the test split stays locked until the end.
+        campaigns apart. Training pairs are real letters only, with personalized copies as hard
+        positives; no LLM rewordings are used in training. The 13 full campaigns come from seven
+        named sponsors and two unknown ones, so we use leave-one-sponsor-out cross-validation and
+        report the spread across folds.
   \item \textbf{Characterize} each campaign by size, the share of comments arriving on its busiest day,
         the share of copies with personal text, whether a sponsor is named in its attachments, and
         signer checks: ZIP codes outside the stated state, names that also sign other campaigns, and
         claimed versus listed signer counts. Each feature is measured in median absolute deviations
-        from the docket's median, and campaigns with the largest total rank first for review.
+        from the docket's median, and campaigns with the largest total rank first for review. This is
+        an interpretable heuristic, not a fraud score; campaigns with no copies are ranked on size,
+        timing and sponsor only.
   \item \textbf{Link} each campaign to the rule sections it argues about. BM25 keyword retrieval over
         Federal Register sections is the baseline, then embedding retrieval, and an LLM is added only
         if it beats both.
@@ -122,14 +126,16 @@ embedding model, HDBSCAN, BM25 and a hosted LLM, and build the rest (architectur
 \end{enumerate}
 
 \textbf{Success.} Grouping is scored with \emph{B-cubed F1}, which averages precision and recall over
-letters so that the largest campaigns do not dominate. We report it on all letters and separately on
-personalized and reworded letters, against exact matching, MinHash and the untuned model. Reworded
+letters and avoids the quadratic weight pairwise F1 gives large campaigns. The headline result is
+on the naturally personalized letters, with all letters and a per-campaign breakdown alongside, each
+against exact matching, MinHash and the untuned model. Reworded
 test letters come from an LLM never used in training, at five strengths (20\% to 100\% of sentences
 rewritten). The fine-tuned model must beat MinHash on reworded letters at every strength without
-losing ground on exact copies. On FCC 17-108, with a review budget of 20 campaigns, we report
-precision and recall of the NY AG's fake campaigns and list every false positive. Sponsor evidence
+losing ground on exact copies. On FCC 17-108 we map each campaign the NY AG names to its ECFS template by text
+search, then report precision and recall in our top 20, how many campaigns were ranked, and every
+false positive. Sponsor evidence
 is audited by hand on the 92 unknown-sponsor campaigns, and provision links by top-1 accuracy on 50
-hand-mapped campaigns. For the analyst, success is every campaign and its evidence on one screen
+hand-mapped campaigns, at least half of which argue about a specific section. For the analyst, success is every campaign and its evidence on one screen
 instead of keyword search.
 
 \section{Minimum Components}
@@ -142,7 +148,7 @@ when a new docket arrives with agency campaign records.
 
 \section{Learning Emphasis}
 
-From the course, fine-tuning, RAG with a vector database, containers and Vertex AI. From outside it,
+From the course, fine-tuning, retrieval and RAG, containers and Vertex AI. From outside it,
 MinHash, density clustering and clustering evaluation without clean labels.
 
 \section{Application Mock Design}
@@ -161,8 +167,9 @@ Action petition whose cover letter claims 110 more signers than its signer file 
 Making a genuine campaign look fraudulent would harm the group and every real person who signed. The
 app scores campaigns, never people, shows the evidence behind every rank, and labels a sponsor as
 recorded by EPA or found in an attachment. The model would learn EPA's grouping mistakes, so we
-hand-check 200 letter pairs and adjudicate disagreements. The FCC labels cover few campaigns, so
-results there are case studies. Freely LLM-rewritten letters may still escape grouping, and the
+hand-check 200 letter pairs and adjudicate disagreements. Only 13 EPA campaigns contain every letter, so there are many letters but few independent
+campaigns; if fine-tuning does not beat the untuned model on held-out sponsors, we keep the simpler
+model. The FCC labels cover few campaigns, so results there are case studies. Freely LLM-rewritten letters may still escape grouping, and the
 rewording test measures how often. If the full FCC download is not done by MS4, we validate on the
 campaigns the NY AG named plus a random sample of other filings.
 
@@ -178,27 +185,27 @@ API on Cloud Run with monitoring.
 \section{Research and Development}
 
 {\footnotesize
-[1] H. Yang, J. Callan, S. Shulman. Next steps in near-duplicate detection for eRulemaking. dg.o 2006. \url{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}\par
-[2] J. Kao. More than a million pro-repeal net neutrality comments were likely faked. 2017. \url{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}\par
-[3] M. Weiss. Deepfake bot submissions to federal public comment websites cannot be distinguished from human submissions. \emph{Technology Science}, 2019. \url{https://techscience.org/a/2019121801/}; data \url{https://doi.org/10.7910/DVN/OQCPOT}\par
-[4] New York State Office of the Attorney General. Fake comments report on the FCC's 2017 net neutrality proceeding. May 2021. \url{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}\par
-[5] S. Balla, B. Dooling, M. Herz, M. Livermore. Mass, computer-generated, and fraudulent comments. Report to the Administrative Conference of the United States, 2021. \url{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}
+[1] H. Yang, J. Callan, S. Shulman. Next steps in near-duplicate detection for eRulemaking. dg.o 2006. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{cs.cmu.edu}\par
+[2] J. Kao. More than a million pro-repeal net neutrality comments were likely faked. 2017. \href{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}{hackernoon.com}\par
+[3] M. Weiss. Deepfake bot submissions to federal public comment websites cannot be distinguished from human submissions. \emph{Technology Science}, 2019. \href{https://techscience.org/a/2019121801/}{techscience.org}; data doi:10.7910/DVN/OQCPOT\par
+[4] New York State Office of the Attorney General. Fake comments report on the FCC's 2017 net neutrality proceeding. May 2021. \href{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}{ag.ny.gov}\par
+[5] S. Balla, B. Dooling, M. Herz, M. Livermore. Mass, computer-generated, and fraudulent comments. Report to the Administrative Conference of the United States, 2021. \href{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}{acus.gov}
 \par}
 
 \section{Appendix A: Application Mock}
 
 \begin{center}
-\includegraphics[width=\textwidth]{docs/mock.png}
+\includegraphics[width=0.92\textwidth]{docs/mock.png}
 \end{center}
 
 \section{Appendix B: Preliminary Architecture}
 
 A batch pipeline runs once per docket and writes campaigns to a store that the API serves. Training
-runs separately, and a new model replaces the current one only if it scores higher on the validation
-split.
+runs separately, and a new model replaces the current one only if it scores higher on held-out
+sponsors.
 
 \begin{center}
-\includegraphics[width=\textwidth]{docs/architecture.png}
+\includegraphics[width=0.92\textwidth]{docs/architecture.png}
 \end{center}
 
 \end{document}
