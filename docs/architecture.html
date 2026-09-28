@@ -50,23 +50,23 @@
   <!-- data-collector -->
   <rect class="box" x="290" y="70" width="240" height="120"/>
   <text class="t" x="306" y="98">data-collector</text>
-  <text class="s" x="306" y="124">Fetch with checkpoints,</text>
-  <text class="s" x="306" y="144">five API keys; extract PDF</text>
-  <text class="s" x="306" y="164">text, Tesseract as fallback</text>
+  <text class="s" x="306" y="124">Fetch with checkpoints, five</text>
+  <text class="s" x="306" y="144">keys; PDF text, OCR for scans;</text>
+  <text class="s" x="306" y="164">signer names hashed</text>
 
   <!-- data-processor -->
   <rect class="box" x="570" y="70" width="240" height="120"/>
   <text class="t" x="586" y="98">data-processor</text>
   <text class="s" x="586" y="124">One record per letter;</text>
-  <text class="s" x="586" y="144">MinHash groups near-exact</text>
-  <text class="s" x="586" y="164">copies</text>
+  <text class="s" x="586" y="144">MinHash collapses near-exact</text>
+  <text class="s" x="586" y="164">copies to representatives</text>
 
   <!-- campaign-builder -->
   <rect class="ours" x="850" y="70" width="300" height="120"/>
   <text class="tb" x="866" y="98">campaign-builder</text>
-  <text class="s" x="866" y="124">Embed leftovers, cluster with</text>
-  <text class="s" x="866" y="144">HDBSCAN; compute evidence</text>
-  <text class="s" x="866" y="164">and rank campaigns</text>
+  <text class="s" x="866" y="124">Embed representatives and the</text>
+  <text class="s" x="866" y="144">rest together, HDBSCAN; compute</text>
+  <text class="s" x="866" y="164">evidence and rank campaigns</text>
 
   <!-- GCS + DVC -->
   <rect class="store" x="290" y="212" width="520" height="56"/>
@@ -75,30 +75,32 @@
 
   <!-- Training band -->
   <rect class="ext" x="40" y="360" width="210" height="160"/>
-  <text class="t" x="56" y="388">Labels and test sets</text>
-  <text class="s" x="56" y="416">EPA campaign records</text>
-  <text class="s" x="56" y="438">NY AG findings</text>
-  <text class="s" x="56" y="460">Weiss comments</text>
-  <text class="s" x="56" y="490">reworded test letters</text>
+  <text class="t" x="56" y="388">Labels</text>
+  <text class="s" x="56" y="414">Train, validation: EPA</text>
+  <text class="s" x="56" y="434">campaigns, split by sponsor</text>
+  <text class="s" x="56" y="464">Locked test: EPA split,</text>
+  <text class="s" x="56" y="484">NY AG, Weiss, Kao,</text>
+  <text class="s" x="56" y="504">LLM-reworded letters</text>
 
   <rect class="ours" x="290" y="360" width="240" height="160"/>
   <text class="tb" x="306" y="388">model-training</text>
   <text class="s" x="306" y="414">Contrastive fine-tuning</text>
   <text class="s" x="306" y="434">of all-MiniLM-L6-v2 on</text>
-  <text class="s" x="306" y="454">EPA campaigns; 20% of</text>
-  <text class="s" x="306" y="474">campaigns held out</text>
+  <text class="s" x="306" y="454">EPA campaigns; personalized</text>
+  <text class="s" x="306" y="474">copies as hard positives</text>
 
   <rect class="box" x="570" y="360" width="240" height="160"/>
   <text class="t" x="586" y="388">evaluation</text>
-  <text class="s" x="586" y="414">Pairwise F1 vs exact match,</text>
+  <text class="s" x="586" y="414">B-cubed F1 vs exact match,</text>
   <text class="s" x="586" y="434">MinHash, untuned model;</text>
-  <text class="s" x="586" y="454">recall@k on FCC 17-108</text>
+  <text class="s" x="586" y="454">precision and recall at 20</text>
+  <text class="s" x="586" y="474">on FCC 17-108</text>
 
   <rect class="store" x="850" y="360" width="300" height="160"/>
   <text class="t" x="866" y="388">Model registry</text>
   <text class="s" x="866" y="414">Vertex AI; a new version is</text>
-  <text class="s" x="866" y="434">promoted only if it beats</text>
-  <text class="s" x="866" y="454">the current one</text>
+  <text class="s" x="866" y="434">promoted only if it beats the</text>
+  <text class="s" x="866" y="454">current one on validation</text>
 
   <!-- Serving -->
   <rect class="store" x="1210" y="70" width="350" height="56"/>
@@ -110,12 +112,12 @@
 
   <rect class="ours" x="1210" y="226" width="350" height="96"/>
   <text class="tb" x="1226" y="254">api-service</text>
-  <text class="s" x="1226" y="280">FastAPI; RAG links each campaign</text>
-  <text class="s" x="1226" y="300">to the provisions it argues about</text>
+  <text class="s" x="1226" y="280">FastAPI; live comment-to-campaign</text>
+  <text class="s" x="1226" y="300">match; links campaigns to rule text</text>
 
   <rect class="ext" x="1210" y="344" width="160" height="60"/>
   <text class="t" x="1226" y="370">Gemini</text>
-  <text class="s" x="1226" y="392">Vertex AI</text>
+  <text class="s" x="1226" y="392">only if it beats BM25</text>
 
   <rect class="box" x="1400" y="344" width="160" height="60"/>
   <text class="t" x="1416" y="370">frontend</text>
@@ -141,6 +143,7 @@
   <path class="a" d="M810,440 L848,440"/>
   <path class="a" d="M145,520 L145,530 L690,530 L690,522"/>
   <path class="a" d="M1000,360 L1000,192"/>
+  <path class="a" d="M1150,480 L1182,480 L1182,304 L1208,304"/>
   <text class="lab" x="1008" y="300">fine-tuned model</text>
   <path class="a" d="M450,268 L450,358"/>
   <text class="lab" x="458" y="304">letters</text>
