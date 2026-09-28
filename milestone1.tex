@@ -9,6 +9,7 @@
 \usepackage{microtype}
 \usepackage{titlesec,enumitem,booktabs,multicol,graphicx,xcolor}
 \usepackage{xurl}
+\urlstyle{same}
 \usepackage[document]{ragged2e}
 \usepackage[colorlinks=true,allcolors=blue!55!black]{hyperref}
 
@@ -74,14 +75,11 @@ individual comment as fake.
         \emph{comment} is one person's submission, a \emph{letter} is a comment whose full text we
         have, and a \emph{signer} is a name, city and ZIP in a signer list. The development docket
         (\texttt{EPA-HQ-OW-2018-0149}) has 11{,}444 records standing for 518{,}473 comments: 11{,}243
-        individual comments plus 201 campaign records covering 507{,}230 more. The held-out transfer
-        docket, the 2017 Clean Power Plan repeal (\texttt{EPA-HQ-OAR-2017-0355}), has 25{,}976
-        individual comments and 230 campaign records; 8 of those attach every letter (about 100{,}000,
-        of which about 1{,}700 are personalized). FCC 17-108 has 23{,}982{,}072 filings.
+        individual comments plus 201 campaign records covering 507{,}230 more:
 
-        \smallskip
+        \par\smallskip
         {\small
-        \begin{tabular}{@{}rrl@{}}
+        \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}rrl@{}}
         \toprule
         \textbf{Records} & \textbf{Comments} & \textbf{Campaign attachment} \\
         \midrule
@@ -89,12 +87,18 @@ individual comment as fake.
         8 & 295{,}647 & a signer list \\
         180 & 93{,}864 & one sample letter \\
         \bottomrule
-        \end{tabular}}
+        \end{tabular*}}
+        \smallskip
+
+        The held-out transfer docket, the 2017 Clean Power Plan repeal
+        (\texttt{EPA-HQ-OAR-2017-0355}), has 25{,}976 individual comments and 230 campaign records, 8 of
+        which attach every letter (about 100{,}000 letters, 1{,}723 of them personalized). FCC 17-108 has
+        23{,}982{,}072 filings in all.
   \item \textbf{Key attributes.} Per letter, its text and, for individual comments and ECFS filings,
         a receipt date. Per campaign record, one receipt date, a sponsor and a copy count. Per signer,
         name, city and ZIP. We keep no street addresses.
-  \item \textbf{Relevance.} EPA's grouping labels about 114{,}000 letters with their campaign. About
-        1{,}700 are \emph{personalized}: they differ from their template by over 10\% in length because
+  \item \textbf{Relevance.} EPA's grouping labels about 114{,}000 letters with their campaign, and
+        1{,}678 are \emph{personalized}: they differ from their template by over 10\% in length because
         the sender added words. Only 7\% of those still match their template under MinHash at a
         threshold of 0.8, and 78\% at 0.5. \emph{Reworded} letters, rewritten by an LLM, are
         a separate stress test.
@@ -205,7 +209,7 @@ file lists.
 \section*{References}
 
 {\footnotesize
-[1] H. Yang, J. Callan, S. Shulman. Next steps in near-duplicate detection for eRulemaking. dg.o 2006. \url{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}\par
+[1] H. Yang, J. Callan, S. Shulman. Next steps in near-duplicate detection for eRulemaking. dg.o 2006. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{https://www.cs.cmu.edu/$\sim$callan/Papers/dgo06-huiyang.pdf}\par
 [2] J. Kao. More than a million pro-repeal net neutrality comments were likely faked. Hackernoon, 2017. \url{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}\par
 [3] S. Xiao et al. C-Pack: packaged resources to advance general Chinese embedding (BGE models). 2023. \url{https://huggingface.co/BAAI/bge-small-en-v1.5}\par
 [4] New York State Office of the Attorney General. Fake comments report, FCC 2017 net neutrality proceeding. May 2021. \url{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}\par
