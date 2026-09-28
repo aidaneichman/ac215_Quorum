@@ -121,8 +121,7 @@ model, HDBSCAN, BM25 and a hosted LLM, and build the rest (Appendix B).
   \item \textbf{Group.} MinHash [6], a fast estimate of word overlap, collapses near-exact copies to
         one representative each. Representatives and all remaining letters are embedded and clustered
         together with HDBSCAN, so a reworded letter joins its template's group. On FCC 17-108 we
-        cluster a sample stratified by MinHash group size, so large campaigns are always represented,
-        and assign the rest to the nearest cluster.
+        cluster a sample stratified by MinHash group size and assign the rest to the nearest cluster.
   \item \textbf{Fine-tune our own embedding model}, \texttt{bge-small-en-v1.5} [3] (512 tokens; the
         median letter is about 290 and personal text usually comes last), with a contrastive loss on
         real, deduplicated letters, personalized copies as hard positives. The 13 full campaigns come
@@ -141,11 +140,10 @@ model, HDBSCAN, BM25 and a hosted LLM, and build the rest (Appendix B).
 \section{Success Criteria}
 
 \begin{itemize}
-  \item \textbf{For the analyst.} Every campaign and its evidence on one screen, not keyword search.
+  \item \textbf{For the analyst.} Every campaign and its evidence on one screen.
   \item \textbf{Grouping.} \emph{B-cubed F1}, which averages precision and recall over letters, on the
         held-out sponsor's personalized letters, scored inside a clustering of the whole docket,
-        individual comments included (outliers count as single-letter groups). Baselines are exact
-        match, MinHash at 0.5 and 0.8, and the untuned model.
+        individual comments included, against exact match, MinHash (0.5, 0.8) and the untuned model.
   \item \textbf{Robustness.} Letters reworded by an unseen LLM at five strengths (20--100\% of
         sentences); the fine-tuned model should beat MinHash at every strength.
   \item \textbf{Transfer.} The same comparison on the held-out Clean Power Plan docket, reported
@@ -174,8 +172,8 @@ AI. From outside it, MinHash, density clustering and clustering evaluation witho
 \paragraph{Application mock} Appendix A, filled in with real records. We built screen 3 by hand from
 one campaign's PDFs; the pipeline will do it for every campaign.
 
-\paragraph{Fun factor} We get to answer, docket by docket, a question that took a state attorney
-general four years and subpoenas. The first unknown-sponsor campaign we opened (66{,}777 comments)
+\paragraph{Fun factor} We get to answer a question that took a state attorney general four
+years and subpoenas. The first unknown-sponsor campaign we opened (66{,}777 comments)
 turned out to be a CREDO Action petition whose cover letter claims 110 more signers than its signer
 file lists.
 
@@ -183,11 +181,10 @@ file lists.
 
 \begin{itemize}
   \item Making a genuine campaign look fraudulent would harm the group and every real signer. The app
-        ranks campaigns, never people, shows the evidence behind each rank, says whether a sponsor was
-        recorded by EPA or found in an attachment, and corrects any display a named group disputes.
+        ranks campaigns, never people, shows the evidence behind each rank, and corrects any display a
+        named group disputes.
   \item The model would learn EPA's grouping mistakes, so we hand-check 200 letter pairs and 100
-        letters flagged as personalized. With only 13 full-text campaigns, the transfer test decides
-        whether fine-tuning ships.
+        letters flagged as personalized.
   \item The NY AG findings cover few campaigns, so FCC results are case studies. If the FCC download
         slips, we use the named campaigns plus a random sample of other filings.
 \end{itemize}
@@ -200,11 +197,11 @@ file lists.
   \item \textbf{MS3, 12 Nov.} Fine-tuning on Vertex AI with W\&B, Vertex pipeline, campaign
         evidence, sponsor audit, live API on Cloud Run with monitoring.
   \item \textbf{MS4, 1 Dec.} Frontend, CI and tests, FCC and Clean Power Plan evaluations.
-  \item \textbf{MS5, 11 Dec.} GKE, CI/CD, retraining on the Clean Power Plan docket gated by
-        leave-one-sponsor-out scores, video, blog, public test-set release.
+  \item \textbf{MS5, 11 Dec.} GKE, CI/CD, gated retraining on the Clean Power Plan docket, video,
+        blog, public test-set release.
 \end{itemize}
 
-\newgeometry{letterpaper,margin=0.45in,top=0.55in,bottom=0.5in}
+\newgeometry{margin=0.45in,top=0.55in,bottom=0.5in}
 \onecolumn
 
 \section*{Appendix A: Application Mock}
