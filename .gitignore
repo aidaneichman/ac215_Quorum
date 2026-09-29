@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Secrets
+.env
+undersigned-key.json
+
+# DVC-tracked data (DVC manages these separately)
+data/raw/
+data/interim/
+data/processed/
+
+# macOS
+.DS_Store
