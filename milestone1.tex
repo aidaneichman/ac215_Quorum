@@ -184,11 +184,9 @@ the rest, as Appendix B shows.
 \paragraph{Learning emphasis} Fine-tuning, RAG, containers and Vertex AI from the course, and MinHash,
 HDBSCAN and label-scarce evaluation from outside it.
 
-\paragraph{Application mock} Appendix A uses real records, and screen 3 shows values we extracted from
-one campaign's PDFs.
+\paragraph{Application mock} Appendix A, with values extracted from real records.
 
-\paragraph{Fun factor} We get to answer a question that took a state attorney general four years and
-subpoenas. The first unknown-sponsor campaign we opened
+\paragraph{Fun factor} It took a state attorney general subpoenas to answer this. The first unknown-sponsor campaign we opened
 (66{,}777 comments) was a CREDO Action petition claiming 110 more signers than its file lists.
 
 \section{Limitations and Risks}
@@ -199,16 +197,14 @@ subpoenas. The first unknown-sponsor campaign we opened
         recorded by EPA or found in an attachment.
   \item The model would learn EPA's grouping mistakes, so we check 200 letter pairs and 100
         personalized letters by hand before training.
-  \item The NY AG findings cover few campaigns, so FCC results are case studies, and if the download
-        runs late we use those campaigns plus a random sample.
+  \item The NY AG findings cover few campaigns, so FCC results are case studies.
 \end{itemize}
 
 \section{Milestones}
 
 \begin{leads}
-  \item \lead{Done for MS1} All 201 attachments downloaded plus the Clean Power Plan's eight full-letter
-        ones, counts measured, MinHash and untuned
-        embeddings tested on the 1{,}678 personalized letters.
+  \item \lead{Done for MS1} Both dockets' attachments downloaded and counted, and MinHash and
+        untuned embeddings tested on the 1{,}678 personalized letters.
   \item \lead{MS2, 20 Oct (LLM track)} Containers, DVC, FCC download, hand labels, MinHash,
         untuned and BM25 baselines, vector DB and app skeleton.
   \item \lead{MS3, 12 Nov} Fine-tuning on Vertex AI with W\&B, a Vertex pipeline, campaign
