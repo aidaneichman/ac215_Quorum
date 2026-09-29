@@ -60,9 +60,9 @@ The comments on a rule are collected in a \emph{docket}, and on big rules most o
 \emph{form letters}. An advocacy group, the \emph{sponsor}, writes one letter and asks its supporters
 to send it, and all the copies together make up a \emph{campaign}.
 
-This is the norm when real people send the letter. It is fraud when the names are, instead, stolen, and on
-arrival the two look the same. In the FCC's 2017 net neutrality repeal, the agency
-received 22 million comments; four years later, New York's Attorney General found that about 18 million were fake [4].
+This is the norm when real people send the letter. It is fraud when the names are stolen, and on
+arrival the two look the same. The FCC's 2017 net neutrality repeal drew 22 million comments, and
+four years later New York's Attorney General found 18 million of them were fake [4].
 
 Agencies post one representative letter per campaign with a count of copies, as the Administrative
 Conference of the United States recommended in 2021 [5]. On our development docket, EPA's 2019
@@ -78,7 +78,7 @@ and the NY AG report drew us to the problem.
 
 \paragraph{Problem statement} Given a rulemaking docket, find its comment campaigns and show each
 one's size, timing, arguments and evidence of whether real people sent it, without labelling any
-single comment as fake.
+individual comment as fake.
 
 \section{Data Sources}
 
@@ -96,7 +96,7 @@ single comment as fake.
         {\small
         \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}rrl@{}}
         \toprule
-        \multicolumn{1}{r}{\sffamily\bfseries\footnotesize Records} & \multicolumn{1}{r}{\sffamily\bfseries\footnotesize Comments} & {\sffamily\bfseries\footnotesize Campaign attachment} \\
+        \multicolumn{1}{r}{\sffamily\bfseries\footnotesize Campaign records} & \multicolumn{1}{r}{\sffamily\bfseries\footnotesize Comments} & {\sffamily\bfseries\footnotesize Campaign attachment} \\
         \midrule
         13 & 117{,}719 & every letter ($\approx$114{,}000) \\
         8 & 295{,}647 & a signer list \\
@@ -114,7 +114,7 @@ single comment as fake.
         street addresses.
   \item \lead{Relevance} EPA's grouping labels about 114{,}000 letters with their campaign. Of these,
         1{,}678 are \emph{personalized}, with enough of the sender's own words to differ in length from
-        the template by over 10\%. MinHash matches 7\% of them to their template at a
+        the template by over 10\%. MinHash, a fast estimate of word overlap, matches only 7\% of them to their template at a
         threshold of 0.8 and 78\% at 0.5. \emph{Reworded} letters, rewritten by an LLM, are a separate
         stress test.
   \item \lead{Data quality concerns} One API call per record means 11.4 hours per key for the
@@ -132,17 +132,17 @@ the rest, as Appendix B shows.
 
 \begin{enumerate}
   \item \textbf{Ingest} comments, attachments and signer lists into one record per letter.
-  \item \textbf{Group} near-exact copies into one representative each with MinHash [6], a fast
-        estimate of word overlap between letters. We embed the representatives together with the remaining letters and
+  \item \textbf{Group} near-exact copies into one representative each with MinHash [6].
+        We embed the representatives together with the remaining letters and
         cluster them with HDBSCAN, so a reworded letter lands with its template. For FCC 17-108 we
         cluster a sample stratified by MinHash group size and assign the rest to the nearest one.
   \item \textbf{Fine-tune our own embedding model}, starting from \texttt{bge-small-en-v1.5} [3]. It
         reads 512 tokens, enough for the typical 290-token letter and the personal text at its end, and learns with
-        a contrastive loss on real letters, personalized copies as hard positives. It is
+        a contrastive loss on real letters, with personalized copies as hard positives. It is
         cross-validated by leaving out one of the eight sponsor groups at a time.
   \item \textbf{Characterize} each campaign by size, personalized share, any sponsor named in its
         attachments, timing where comments have their own dates, and signer checks such as ZIPs outside
-        the stated state, names on several campaigns, or claimed versus listed counts. Features are scored against the docket median
+        the stated state, names on several campaigns, or claimed versus listed counts. Features are scored as deviations from the docket median
         and averaged, and the ranking says what to read first. It is not a fraud score.
   \item \textbf{Link} each campaign to the rule sections it argues about, trying BM25 first, then
         embedding retrieval, and an LLM only if it beats both.
@@ -161,7 +161,7 @@ the rest, as Appendix B shows.
   \item \lead{Robustness} Letters reworded by an unseen LLM at five strengths, from 20\% to 100\% of
         sentences. The fine-tuned model should beat MinHash at each.
   \item \lead{Transfer} The same comparison on the Clean Power Plan docket, with its five unseen
-        sponsors reported separately, and on Kao's FCC cluster [2]. If fine-tuning does not help
+        sponsors reported separately, and on Kao's 1.3-million-comment FCC cluster [2]. If fine-tuning does not help
         there, we ship the untuned model.
   \item \lead{Ranking} How many of the NY AG's campaigns land in our top 20 on FCC 17-108, listing
         every false positive.
@@ -183,8 +183,8 @@ the rest, as Appendix B shows.
 \paragraph{Learning emphasis} Fine-tuning, RAG, containers and Vertex AI from the course, and
 MinHash, density clustering and label-scarce evaluation from outside it.
 
-\paragraph{Application mock} Appendix A uses real records. We built screen 3 by hand, and the
-pipeline will produce it for every campaign.
+\paragraph{Application mock} Appendix A uses real records. Screen 3 shows values we extracted from one
+campaign's two PDF attachments, and the pipeline will produce the same view for every campaign.
 
 \paragraph{Fun factor} We get to answer a question that took a state attorney general four years and
 subpoenas. The first campaign with no known sponsor that we opened, 66{,}777 comments, turned out to
@@ -205,6 +205,9 @@ be a CREDO Action petition whose cover letter claims 110 more signers than its s
 \section{Milestones}
 
 \begin{leads}
+  \item \lead{Done for MS1} All 201 campaign attachments downloaded (about 1 GB), record, comment and
+        letter counts measured, MinHash tested on the 1{,}678 personalized letters, and the mock filled
+        with real records.
   \item \lead{MS2, 20 Oct (LLM track)} Containers, DVC, FCC download, hand labels, MinHash,
         untuned and BM25 baselines, vector DB and app skeleton.
   \item \lead{MS3, 12 Nov} Fine-tuning on Vertex AI with W\&B, a Vertex pipeline, campaign
@@ -220,7 +223,7 @@ be a CREDO Action petition whose cover letter claims 110 more signers than its s
 
 \begin{center}
 \makebox[\textwidth]{\includegraphics[width=7.4in]{docs/mock_crop.png}}\\[3pt]
-{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure A.} \itshape Real records from the development docket. Screen 3 was built by hand from campaign 4291's two PDFs.}
+{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure A.} \itshape Real records from the development docket. Screen 3 shows values extracted from campaign 4291's two PDF attachments.}
 \end{center}
 
 \vfill
