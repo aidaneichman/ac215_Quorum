@@ -97,7 +97,7 @@ individual comment as fake.
         \toprule
         \multicolumn{1}{r}{\sffamily\bfseries\footnotesize Campaign records} & \multicolumn{1}{r}{\sffamily\bfseries\footnotesize Comments} & {\sffamily\bfseries\footnotesize Campaign attachment} \\
         \midrule
-        13 & 117{,}719 & every letter ($\approx$116{,}000 extracted) \\
+        13 & 117{,}719 & every letter ($\approx$116{,}000) \\
         8 & 295{,}647 & a signer list \\
         180 & 93{,}864 & one sample letter \\
         \bottomrule
@@ -160,8 +160,7 @@ the rest, as Appendix B shows.
   \item \lead{Grouping} \emph{B-cubed F1}, averaging precision and recall over letters, on the
         held-out sponsor's personalized letters within a whole-docket clustering, against exact match,
         MinHash at 0.5 and 0.8, and the untuned model.
-  \item \lead{Robustness} Held-out sponsors' letters reworded by an unseen LLM, 20\% to 100\% of
-        sentences. The fine-tuned model should beat MinHash at each strength.
+  \item \lead{Robustness} Held-out sponsors' letters reworded by an unseen LLM at five strengths, 20\% to 100\% of sentences. The fine-tuned model should beat MinHash at each strength.
   \item \lead{Transfer} The same comparison on the Clean Power Plan docket, unseen sponsors
         reported separately, and on Kao's 1.3-million-comment FCC cluster [2]. If fine-tuning does not
         help, we ship the untuned model.
@@ -187,7 +186,8 @@ HDBSCAN and label-scarce evaluation from outside it.
 
 \paragraph{Application mock} Appendix A, with values extracted from real records.
 
-\paragraph{Fun factor} It took a state attorney general subpoenas to answer this. The first unknown-sponsor campaign we opened
+\paragraph{Fun factor} We get to answer a question that took a state attorney general four years and
+subpoenas. The first unknown-sponsor campaign we opened
 (66{,}777 comments) was a CREDO Action petition claiming 110 more signers than its file lists.
 
 \section{Limitations and Risks}
@@ -198,7 +198,8 @@ HDBSCAN and label-scarce evaluation from outside it.
         recorded by EPA or found in an attachment.
   \item The model would learn EPA's grouping mistakes, so we check 200 letter pairs and 100
         personalized letters by hand before training.
-  \item The NY AG findings cover few campaigns, so FCC results are case studies.
+  \item The NY AG findings cover few campaigns, so FCC results are case studies. If the download runs late, we use those
+        campaigns plus a random sample.
 \end{itemize}
 
 \section{Milestones}
@@ -211,7 +212,7 @@ HDBSCAN and label-scarce evaluation from outside it.
   \item \lead{MS3, 12 Nov} Fine-tuning on Vertex AI with W\&B, a Vertex pipeline, campaign
         evidence, the sponsor audit and a monitored live API on Cloud Run.
   \item \lead{MS4, 1 Dec} Frontend, CI, tests, FCC and transfer evaluations.
-  \item \lead{MS5, 11 Dec} GKE, CI/CD, gated retraining, video, blog, test sets.
+  \item \lead{MS5, 11 Dec} GKE, CI/CD, gated retraining, video, blog, public test sets.
 \end{leads}
 
 \onecolumn
