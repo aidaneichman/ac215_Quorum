@@ -202,6 +202,20 @@ subpoenas. The first unknown-sponsor campaign we opened
         campaigns plus a random sample.
 \end{itemize}
 
+\section{References}
+
+{\footnotesize
+\begin{enumerate}[label={[\arabic*]},leftmargin=1.8em,labelsep=.4em,itemsep=2pt,parsep=0pt,topsep=0pt]
+\item H.~Yang, J.~Callan, S.~Shulman. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{Next steps in near-duplicate detection for eRulemaking}. \emph{dg.o}, 2006.
+\item J.~Kao. \href{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}{More than a million pro-repeal net neutrality comments were likely faked}. Hackernoon, 2017.
+\item S.~Xiao et al. C-Pack: packaged resources to advance general Chinese embedding. 2023. Model: \href{https://huggingface.co/BAAI/bge-small-en-v1.5}{huggingface.co/BAAI/bge-small-en-v1.5}.
+\item New York State Office of the Attorney General. \href{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}{Report on fake comments in the FCC's 2017 net neutrality proceeding}. May 2021.
+\item Administrative Conference of the United States. \href{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}{Recommendation 2021-1: Managing mass, computer-generated, and falsely attributed comments}. 2021.
+\item A.~Broder. On the resemblance and containment of documents. \emph{Compression and Complexity of Sequences}, 1997.
+\end{enumerate}\par}
+
+\onecolumn
+
 \section{Milestones}
 
 \begin{leads}
@@ -215,14 +229,14 @@ subpoenas. The first unknown-sponsor campaign we opened
   \item \lead{MS5, 11 Dec} GKE, CI/CD, gated retraining, video, blog, public test sets.
 \end{leads}
 
-\onecolumn
+\vspace{4pt}
 
 
 \section*{Appendix A: Application Mock}
 
 \begin{center}
-\makebox[\textwidth]{\includegraphics[width=7.4in]{docs/mock_crop.png}}\\[3pt]
-{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure A.} \itshape Real records from the development docket. Screen 3 shows values extracted from campaign 4291's two PDF attachments. One late record (14 May 2020) falls outside the chart range.}
+\makebox[\textwidth]{\includegraphics[width=7.2in]{docs/mock_crop.png}}\\[3pt]
+{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure A.} \itshape Real records from the development docket. Screen 3 uses values extracted from campaign 4291's two PDFs. One late record (May 2020) is off the chart.}
 \end{center}
 
 \vfill
@@ -230,7 +244,7 @@ subpoenas. The first unknown-sponsor campaign we opened
 \section*{Appendix B: Preliminary Architecture}
 
 \begin{center}
-\makebox[\textwidth]{\includegraphics[width=7.4in]{docs/architecture_crop.png}}\\[3pt]
+\makebox[\textwidth]{\includegraphics[width=7.2in]{docs/architecture_crop.png}}\\[3pt]
 {\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure B.} \itshape One batch run per docket fills the store the API serves. A new model must beat the current one on held-out sponsors.}
 \end{center}
 
@@ -238,19 +252,6 @@ subpoenas. The first unknown-sponsor campaign we opened
 
 
 
-\section*{References}
 
-\begin{multicols}{2}
-{\footnotesize
-\begin{enumerate}[label={[\arabic*]},leftmargin=1.8em,labelsep=.4em,itemsep=2pt,parsep=0pt,topsep=0pt]
-\item H.~Yang, J.~Callan, S.~Shulman. \href{https://www.cs.cmu.edu/~callan/Papers/dgo06-huiyang.pdf}{Next steps in near-duplicate detection for eRulemaking}. \emph{dg.o}, 2006.
-\item J.~Kao. \href{https://hackernoon.com/more-than-a-million-pro-repeal-net-neutrality-comments-were-likely-faked-e9f0e3ed36a6}{More than a million pro-repeal net neutrality comments were likely faked}. Hackernoon, 2017.
-\item S.~Xiao et al. C-Pack: packaged resources to advance general Chinese embedding. 2023. Model: \href{https://huggingface.co/BAAI/bge-small-en-v1.5}{huggingface.co/BAAI/bge-small-en-v1.5}.
-\item New York State Office of the Attorney General. \href{https://ag.ny.gov/press-release/2021/attorney-general-james-issues-report-detailing-millions-fake-comments-revealing}{Report on fake comments in the FCC's 2017 net neutrality proceeding}. May 2021.
-\item Administrative Conference of the United States. \href{https://www.acus.gov/research-projects/mass-computer-generated-and-fraudulent-comments}{Recommendation 2021-1: Managing mass, computer-generated, and falsely attributed comments}. 2021.
-\item A.~Broder. On the resemblance and containment of documents. \emph{Compression and Complexity of Sequences}, 1997.
-\end{enumerate}\par}
-
-\end{multicols}
 
 \end{document}
