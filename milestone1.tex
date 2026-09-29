@@ -148,9 +148,7 @@ the rest, as Appendix B shows.
         attachments, timing where comments have their own dates, and signer checks such as ZIPs outside
         the stated state, names on several campaigns, or claimed versus listed counts. Features are scored as deviations from the docket median and averaged into a reading
         order, not a fraud score.
-        Signer checks exist for 21 campaigns and personalized share for 13, so the
-        other 180 rank on size and sponsor status, the screen shows which features exist, and the
-        baseline ranks by copy count.
+        Signer checks exist for 21 campaigns and personalized share for 13, so the other 180 rank on size and sponsor status. The baseline ranks by copy count.
   \item \textbf{Link} each campaign to the rule sections it argues about, trying BM25 first, then
         embedding retrieval, and an LLM only if it beats both.
   \item \textbf{Serve} a dashboard and a live endpoint that returns a pasted comment's campaign,
@@ -167,8 +165,7 @@ the rest, as Appendix B shows.
   \item \lead{Robustness} Letters reworded by an unseen LLM at five strengths, from 20\% to 100\% of
         sentences. The fine-tuned model should beat MinHash at each.
   \item \lead{Transfer} The same comparison on the Clean Power Plan docket, its five unseen
-        sponsors reported separately, and on Kao's 1.3-million-comment FCC cluster [2]. If fine-tuning
-        does not help, we ship the untuned model.
+        sponsors reported separately, and on Kao's 1.3-million-comment FCC cluster [2]. If fine-tuning does not help, the untuned model ships.
   \item \lead{Ranking} How many of the NY AG's campaigns land in our top 20 on FCC 17-108. The rest are
         audited by hand, not counted as false positives.
   \item \lead{Evidence and links} Hand audit of the 92 unknown-sponsor campaigns, and top-1 accuracy on
@@ -211,15 +208,14 @@ subpoenas. The first unknown-sponsor campaign we opened
 \section{Milestones}
 
 \begin{leads}
-  \item \lead{Done for MS1} All 201 campaign attachments downloaded, counts measured, MinHash
-        and untuned embeddings tested on the 1{,}678 personalized letters, mock filled with real records.
+  \item \lead{Done for MS1} All 201 attachments downloaded, counts measured, MinHash and untuned
+        embeddings tested on the 1{,}678 personalized letters.
   \item \lead{MS2, 20 Oct (LLM track)} Containers, DVC, FCC download, hand labels, MinHash,
         untuned and BM25 baselines, vector DB and app skeleton.
   \item \lead{MS3, 12 Nov} Fine-tuning on Vertex AI with W\&B, a Vertex pipeline, campaign
         evidence, the sponsor audit and a monitored live API on Cloud Run.
-  \item \lead{MS4, 1 Dec} Frontend, CI, tests, FCC and Clean Power Plan evaluations.
-  \item \lead{MS5, 11 Dec} GKE, CI/CD, retraining gated on development-docket data only,
-        video, blog, public test sets.
+  \item \lead{MS4, 1 Dec} Frontend, CI, tests, FCC and transfer evaluations.
+  \item \lead{MS5, 11 Dec} GKE, CI/CD, gated retraining, video, blog, public test sets.
 \end{leads}
 
 \onecolumn
