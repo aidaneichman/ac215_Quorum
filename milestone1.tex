@@ -16,7 +16,7 @@
 \usepackage{xurl}
 \urlstyle{same}
 \usepackage[document]{ragged2e}
-\definecolor{ink}{HTML}{1F4E79}
+\definecolor{ink}{HTML}{1A1A1A}
 \definecolor{meta}{HTML}{555555}
 \usepackage[colorlinks=true,allcolors=ink]{hyperref}
 
@@ -55,7 +55,8 @@ Team Undersigned \textperiodcentered{} AC215, Fall 2026 \textperiodcentered{} Mi
 
 \section{Background and Motivation}
 
-Before a federal agency changes a regulation, it has to take public comments and consider them.
+Before a federal agency changes a regulation, it has to take public comments and consider them,
+and fake comments have flooded that process before.
 The comments on a rule are collected in a \emph{docket}, and on big rules most of them are
 \emph{form letters}. An advocacy group, the \emph{sponsor}, writes one letter and asks its supporters
 to send it, and all the copies together make up a \emph{campaign}.
@@ -70,7 +71,7 @@ Administrative Conference of the United States endorsed in 2021 [5]. On our deve
 92 with no known sponsor.
 
 Near-duplicate detection groups close copies [1, 6], but its recall falls as wording changes, and
-the 1.3 million likely fake FCC comments Kao [2] found were all reworded from one template. Nothing available tells an
+the 1.3 million likely fake FCC comments data scientist Jeff Kao [2] found were all reworded from one template. Nothing available tells an
 analyst who is behind a campaign or whether its signers look real, so genuine campaigns get written
 off alongside fake ones. Our main user is the agency analyst who has to summarize and answer the
 comment record, and journalists, attorneys general and advocacy groups benefit too. Kao's analysis
@@ -185,7 +186,8 @@ the rest, as Appendix B shows.
 \paragraph{Learning emphasis} Fine-tuning, RAG, containers and Vertex AI from the course, and MinHash,
 HDBSCAN and label-scarce evaluation from outside it.
 
-\paragraph{Application mock} Appendix A, with values extracted from real records.
+\paragraph{Application mock} Appendix A, which follows an analyst from a docket to one
+campaign's evidence, using real records.
 
 \paragraph{Fun factor} We get to answer a question that took a state attorney general four years and
 subpoenas. The first unknown-sponsor campaign we opened
@@ -223,7 +225,7 @@ subpoenas. The first unknown-sponsor campaign we opened
 
 \begin{center}
 \makebox[\textwidth]{\includegraphics[width=7.4in]{docs/mock_crop.png}}\\[3pt]
-{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure A.} \itshape Real records from the development docket. Screen 3 shows values extracted from campaign 4291's two PDF attachments. One late record (14 May 2020) falls outside the chart range.}
+{\fontsize{9}{11}\selectfont\color{meta}{\sffamily\bfseries\color{ink}Figure A.} \itshape Real records. Today an analyst gets keyword search and EPA's list of campaign titles. Here they go from the docket, to its campaigns, to one campaign EPA lists with no sponsor, whose cover letter shows a CREDO Action petition. A missing sponsor is not a sign of fraud.}
 \end{center}
 
 \vfill

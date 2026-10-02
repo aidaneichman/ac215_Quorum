@@ -1,87 +1,82 @@
 networks:
-    default:
-        name: undersigned-network
+  default:
+    name: undersigned-network
 
 services:
-    data-collector:
-        image: data-collector
-        build: ./data-collector
-        container_name: data-collector
-        volumes:
-            - ./secrets:/secrets
-            - ./data-collector:/app
-            - ./data:/app/data
-        environment:
-            GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
-            GCP_PROJECT: $GCP_PROJECT
 
-    data-processor:
-        image: data-processor
-        build: ./data-processor
-        container_name: data-processor
-        volumes:
-            - ./secrets:/secrets
-            - ./data-processor:/app
-            - ./data:/app/data
-        environment:
-            GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
-            GCP_PROJECT: $GCP_PROJECT
+  data-collector:
+    image: data-collector
+    build: ./data-collector
+    container_name: data-collector
+    env_file: .env
+    volumes:
+      - ./secrets:/secrets
+      - ./data-collector/src:/app/src
+      - ./data:/app/data
 
-    campaign-builder:
-        image: campaign-builder
-        build: ./campaign-builder
-        container_name: campaign-builder
-        volumes:
-            - ./secrets:/secrets
-            - ./campaign-builder:/app
-            - ./data:/app/data
-        environment:
-            GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
-            GCP_PROJECT: $GCP_PROJECT
+  data-processor:
+    image: data-processor
+    build: ./data-processor
+    container_name: data-processor
+    env_file: .env
+    volumes:
+      - ./secrets:/secrets
+      - ./data-processor/src:/app/src
+      - ./data:/app/data
 
-    rule-passages:
-        image: rule-passages
-        build: ./rule-passages
-        container_name: rule-passages
-        volumes:
-            - ./secrets:/secrets
-            - ./rule-passages:/app
-        environment:
-            GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
-            GCP_PROJECT: $GCP_PROJECT
-        depends_on:
-            - chromadb
+  campaign-builder:
+    image: campaign-builder
+    build: ./campaign-builder
+    container_name: campaign-builder
+    env_file: .env
+    volumes:
+      - ./secrets:/secrets
+      - ./campaign-builder/src:/app/src
+      - ./data:/app/data
 
-    api-service:
-        image: api-service
-        build: ./api-service
-        container_name: api-service
-        ports:
-            - 8000:8000
-        volumes:
-            - ./secrets:/secrets
-            - ./api-service:/app
-        environment:
-            GOOGLE_APPLICATION_CREDENTIALS: $GOOGLE_APPLICATION_CREDENTIALS
-            GCP_PROJECT: $GCP_PROJECT
-        depends_on:
-            - chromadb
+  rule-passages:
+    image: rule-passages
+    build: ./rule-passages
+    container_name: rule-passages
+    env_file: .env
+    volumes:
+      - ./secrets:/secrets
+      - ./rule-passages/src:/app/src
+    environment:
+      CHROMA_HOST: chromadb
+      CHROMA_PORT: 8000
+    depends_on:
+      - chromadb
 
-    frontend:
-        image: frontend
-        build: ./frontend
-        container_name: frontend
-        ports:
-            - 3000:3000
-        volumes:
-            - ./frontend:/app
-        depends_on:
-            - api-service
+  api-service:
+    image: api-service
+    build: ./api-service
+    container_name: api-service
+    env_file: .env
+    volumes:
+      - ./secrets:/secrets
+      - ./api-service/src:/app/src
+    ports:
+      - 8000:8000
+    environment:
+      CHROMA_HOST: chromadb
+      CHROMA_PORT: 8000
+    depends_on:
+      - chromadb
 
-    chromadb:
-        image: chromadb/chroma:latest
-        container_name: undersigned-chromadb
-        ports:
-            - 9000:8000
-        volumes:
-            - ./docker-volumes/chromadb:/data
+  frontend:
+    image: frontend
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - 3000:80
+    depends_on:
+      - api-service
+
+  chromadb:
+    image: chromadb/chroma:1.5.9
+    container_name: undersigned-chromadb
+    ports:
+      - 9000:8000
+    volumes:
+      - ./docker-volumes/chromadb:/data

@@ -16,3 +16,6 @@ data/processed/
 
 # macOS
 .DS_Store
+
+# Local container state
+docker-volumes/
