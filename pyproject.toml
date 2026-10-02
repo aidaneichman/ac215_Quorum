@@ -8,3 +8,8 @@ dependencies = [
     "google-cloud-storage>=2.10",
     "requests>=2.31",
 ]
+
+[dependency-groups]
+dev = [
+    "dvc[gs]>=3.67.1",
+]
